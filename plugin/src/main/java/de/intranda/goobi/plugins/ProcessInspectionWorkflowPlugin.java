@@ -11,10 +11,10 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
 @Log4j2
-public class SampleWorkflowPlugin implements IWorkflowPlugin, IPlugin {
+public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin {
     
     @Getter
-    private String title = "intranda_workflow_sample";
+    private String title = "intranda_workflow_processInspection";
         
     @Getter
     private String value;
@@ -26,14 +26,14 @@ public class SampleWorkflowPlugin implements IWorkflowPlugin, IPlugin {
 
     @Override
     public String getGui() {
-        return "/uii/plugin_workflow_sample.xhtml";
+        return "/uii/plugin_workflow_processInspection.xhtml";
     }
 
     /**
      * Constructor
      */
-    public SampleWorkflowPlugin() {
-        log.info("Sample workflow plugin started");
+    public ProcessInspectionWorkflowPlugin() {
+        log.info("ProcessInspection workflow plugin started");
         value = ConfigPlugins.getPluginConfig(title).getString("value", "default value");
     }
 }

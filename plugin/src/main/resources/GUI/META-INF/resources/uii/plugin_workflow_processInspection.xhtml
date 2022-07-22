@@ -17,14 +17,14 @@
 						</div>
 						<div class="box-content">
 							<h:panelGroup
-								rendered="#{!LoginForm.hasRole('Plugin_workflow_sample')}">
+								rendered="#{!LoginForm.hasRole('Plugin_workflow_processInspection')}">
 								<h:outputText
 									styleClass="alert alert-danger alert-dismissable margin-bottom-10 margin-top-10"
-									value="#{msgs.plugin_administration_missingPermission} Plugin_workflow_sample"></h:outputText>
+									value="#{msgs.plugin_administration_missingPermission} Plugin_workflow_processInspection"></h:outputText>
 							</h:panelGroup>
 
 							<h:panelGroup id="actionform" styleClass="col-sm-12"
-								rendered="#{LoginForm.hasRole('Plugin_workflow_sample')}">
+								rendered="#{LoginForm.hasRole('Plugin_workflow_processInspection')}">
 								<div class="row">
 									<h:form>
 										hello workflow plugin: #{NavigationForm.workflowPlugin.value}
