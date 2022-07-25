@@ -1,41 +1,248 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:composite="http://xmlns.jcp.org/jsf/composite" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:p="http://primefaces.org/ui">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:x="http://myfaces.apache.org/tomahawk"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
 
     <composite:interface>
     </composite:interface>
 
     <composite:implementation>
 
-        <h:panelGroup>
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="box box-color box-bordered lightgrey">
-						<div class="box-title">
-							<h3>
-								<i class="fa fa-plug"></i>
-								<h:outputText value="#{msgs[NavigationForm.workflowPlugin.title]}" />
-							</h3>
-						</div>
-						<div class="box-content">
-							<h:panelGroup
-								rendered="#{!LoginForm.hasRole('Plugin_workflow_processInspection')}">
-								<h:outputText
-									styleClass="alert alert-danger alert-dismissable margin-bottom-10 margin-top-10"
-									value="#{msgs.plugin_administration_missingPermission} Plugin_workflow_processInspection"></h:outputText>
-							</h:panelGroup>
+        <h:form
+            styleClass="form-horizontal form-bordered">
+            <div class="dataTables_wrapper col-md-12">
+                <!-- search field -->
+                <div class="dataTables_length">
+                    <h:outputText value="#{msgs.treffer}: #{NavigationForm.workflowPlugin.processPaginator.totalResults}" />
+                </div>
 
-							<h:panelGroup id="actionform" styleClass="col-sm-12"
-								rendered="#{LoginForm.hasRole('Plugin_workflow_processInspection')}">
-								<div class="row">
-									<h:form>
-										hello workflow plugin: #{NavigationForm.workflowPlugin.value}
-									</h:form>
-								</div>
-							</h:panelGroup>
-						</div>
-					</div>
-				</div>
-			</div>
-        </h:panelGroup>
+                <!-- +++++++++++++++++  Display as table ++++++++++++++++++++++++ -->
+                <table
+                    role="grid"
+                    id="processTable"
+                    class="table table-hover table-nomargin dataTable table-bordered responsive">
+                    <!-- ### Columnheader row ### -->
+                    <thead>
+                        <tr role="row">
+                            <!-- Embedded Metadata -->
+                            <intranda:columnheader
+                                addClass="tableColumnOverflow maxWidth300"
+                                value="#{msgs.metadata}"
+                                sortable="false" />
+
+                            <th
+                                scope="col"
+                                role="columnheader"
+                                class="tableColumnOverflow maxWidth300"
+                                aria-sort="#{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'ascending' :'none'}">
+                                <button
+                                    class="button-link"
+                                    style="width: 100%; text-align: left;"
+                                    jsf:action="#{NavigationForm.workflowPlugin.getProcessPaginator}"
+                                    aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
+                                    <h:outputText value="#{msgs.prozessTitel}" />
+                                    <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'fa-sort-asc':'fa-sort'}"></span>
+                                    <f:setPropertyActionListener
+                                        target="#{NavigationForm.workflowPlugin.sortField}"
+                                        value="#{NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'titelDesc' : 'titelAsc' }" />
+                                    <f:ajax render="@form" />
+                                </button>
+                            </th>
+
+
+                            <th
+                                scope="col"
+                                role="columnheader"
+                                class="tableColumnOverflow maxwidth200"
+                                aria-sort="#{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'ascending' :'none'}">
+                                <button
+                                    class="button-link"
+                                    style="width: 100%; text-align: left;"
+                                    jsf:action="#{NavigationForm.workflowPlugin.getProcessPaginator}"
+                                    aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'creationDateAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
+                                    <h:outputText value="#{msgs.vorgangsdatum}" />
+                                    <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ?'fa-sort-asc':'fa-sort'}"></span>
+                                    <f:setPropertyActionListener
+                                        target="#{NavigationForm.workflowPlugin.sortField}"
+                                        value="#{NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'creationDateDesc' : 'creationDateAsc' }" />
+                                    <f:ajax render="@form" />
+                                </button>
+                            </th>
+
+
+
+
+
+
+                            <!-- Buttons -->
+                            <intranda:columnheader
+                                addClass="width200"
+                                value="#{msgs.auswahl}"
+                                sortable="false" />
+                        </tr>
+                    </thead>
+                    <ui:repeat
+                        var="zdbItem"
+                        value="#{NavigationForm.workflowPlugin.processPaginator.list}"
+                        varStatus="status">
+                        <tr role="row">
+
+                            <!-- Embedded Metadata -->
+                            <td>
+                                <table>
+                                    <ui:repeat
+                                        var="metadata"
+                                        value="#{NavigationForm.workflowPlugin.metadataList}"
+                                        varStatus="metadatastatus"
+                                        id="metadatalist">
+                                            <tr>
+                                                <td style="border: none !important; padding: 2px; vertical-align: top;">
+                                                    <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
+                                                </td>
+                                                <td style="border: none !important; padding: 2px; white-space: normal;">
+                                                    <h:outputText value="#{zdbItem.getMetadataValue(metadata)}" />
+                                                </td>
+                                            </tr>
+                                    </ui:repeat>
+                                </table>
+                            </td>
+
+                            <!-- Vorgangsdatum -->
+                            <td>
+                                      <h:outputText value="#{zdbItem.process.titel}">
+                                </h:outputText>
+
+                            </td>
+
+                            <td>
+                                <h:outputText value="#{zdbItem.process.erstellungsdatumAsString}">
+                                </h:outputText>
+                            </td>
+
+                            <!-- Buttons -->
+                            <td class="width200">
+
+
+                                <!-- Metadaten-Schaltknopf - Allow writing -->
+                                <h:commandLink
+                                    action="#{NavigationForm.workflowPlugin.openProcess}"
+                                    id="action15"
+                                    rel="tooltip"
+                                    title="#{msgs.metadatenBearbeiten}"
+                                    pt:aria-label="#{msgs.metadatenBearbeiten}">
+                                    <i class="btn fa fa-book " />
+
+                                    <f:setPropertyActionListener
+                                        value="edit"
+                                        target="#{NavigationForm.workflowPlugin.editionMode}" />
+                                    <f:setPropertyActionListener
+                                        value="#{item}"
+                                        target="#{NavigationForm.workflowPlugin.process}" />
+
+                                </h:commandLink>
+
+
+
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                </table>
+
+                <div
+                    class="dataTables_info"
+                    style="float: left;"></div>
+                <div class="dataTables_paginate">
+
+                    <ui:fragment id="zdb_paginator">
+                        <!-- paginator -->
+                        <h:panelGroup rendered="#{NavigationForm.workflowPlugin.processPaginator.totalResults > LoginForm.myBenutzer.tabellengroesse}">
+
+                            <div class="pull-right">
+
+                                <button
+                                    class="btn font-size-s margin-sides-10"
+                                    aria-label="#{msgs.firstPage}"
+                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveFirst}"
+                                    jsf:id="navfirst">
+                                    <i class="fa fa-angle-double-left"></i>
+                                    <f:ajax render="@form" />
+                                </button>
+                                <button
+                                    class="btn btn-primary font-size-s navigator-previous"
+                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMovePrevious}"
+                                    jsf:id="navprev">
+                                    <i class="fa fa-angle-left"></i>
+                                    <h:outputText value=" #{msgs.pagePrevious}" />
+                                    <f:ajax render="@form" />
+                                </button>
+
+                                <div class="margin-sides-10">
+                                    <!-- aktuelle Seite anzeigen -->
+                                    <x:outputText
+                                        id="zdb_txtMoveTo1"
+                                        forceId="true"
+                                        value="#{msgs.seite} #{NavigationForm.workflowPlugin.processPaginator.pageNumberCurrent} #{msgs.von} #{NavigationForm.workflowPlugin.processPaginator.pageNumberLast}"
+                                        onclick="document.getElementById('zdb_txtMoveTo2').style.display='inline';
+                   document.getElementById('zdb_txtMoveTo1').style.display='none';
+                   document.getElementById('zdb_txtMoveTo2').focus();
+                   document.getElementById('zdb_txtMoveTo2').select();" />
+
+                                    <!-- Seite direkt anspringen -->
+                                    <x:inputText
+                                        id="zdb_txtMoveTo2"
+                                        forceId="true"
+                                        value="#{NavigationForm.workflowPlugin.processPaginator.zdb_txtMoveTo}"
+                                        style="display:none;width:30px"
+                                        required="true"
+                                        onblur="document.getElementById('zdb_txtMoveTo2').style.display='none';document.getElementById('zdb_txtMoveTo1').style.display='inline';"
+                                        onkeypress="return submitEnter('zdb_cmdMoveTo',event)" />
+                                    <x:commandButton
+                                        action="#{NavigationForm.Reload}"
+                                        id="zdb_cmdMoveTo"
+                                        forceId="true"
+                                        value="go"
+                                        style="display:none">
+                                    </x:commandButton>
+                                </div>
+
+                                <button
+                                    class="btn btn-primary font-size-s navigator-next"
+                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveNext}"
+                                    jsf:id="navnext">
+                                    <h:outputText value="#{msgs.pageNext} " />
+                                    <i class="fa fa-angle-right"></i>
+                                    <f:ajax render="@form" />
+                                </button>
+                                <button
+                                    class="btn font-size-s margin-sides-10"
+                                    aria-label="#{msgs.lastPage}"
+                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveLast}"
+                                    jsf:id="navlast">
+                                    <i class="fa fa-angle-double-right"></i>
+                                    <f:ajax render="@form" />
+                                </button>
+                            </div>
+                        </h:panelGroup>
+
+                        <!-- /paginator -->
+
+                    </ui:fragment>
+                </div>
+
+            </div>
+
+        </h:form>
+
+
+
 
     </composite:implementation>
 </ui:composition>

@@ -6,6 +6,8 @@
   <properties>
     <jar.name>plugin_intranda_workflow_processInspection-GUI</jar.name>
     <dest.folder>/opt/digiverso/goobi/plugins/GUI/</dest.folder>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
   <parent>
     <groupId>de.intranda.goobi.plugins.workflow</groupId>
@@ -14,15 +16,32 @@
   </parent>
   <build>
     <finalName>${jar.name}</finalName>
-    <resources>
-      <resource>
-        <directory>../src/main/resources/GUI</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
-    <plugins>
+    
+		<sourceDirectory>${project.basedir}/../src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>../src/main/resources/GUI</directory>
+			</resource>
+			<resource>
+				<directory>../src/main/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+				<includes>
+					<include>**org/goobi/process/*.class</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<excludes>
+						<exclude>**/de/intranda/goobi/**/*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>    
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>buildnumber-maven-plugin</artifactId>

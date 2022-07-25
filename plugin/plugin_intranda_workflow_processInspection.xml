@@ -1,6 +1,16 @@
 <config_plugin>
-	
-	<!-- configuration item as sample -->
-	<value>sample value from config</value>
-	
+
+    <!-- current open/inwork/error step -->
+    <stepName>Manueller Kontrollschritt</stepName>
+    
+    <!-- name of the inspection step to open or skip -->
+    <inspectionStepName>Rückstellung Prüfung einer E-Publikation</inspectionStepName>
+    
+    <!-- metadata to display in process list -->
+    <metadata>TitleDocMain</metadata>
+    <metadata>PublicationYear</metadata>
+    <metadata>DocLanguage</metadata>
+    <metadata>OtherCorporate</metadata>
+    <metadata>Copyright</metadata>
+    <metadata>AccessLicense</metadata>
 </config_plugin>

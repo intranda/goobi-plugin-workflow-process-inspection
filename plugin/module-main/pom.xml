@@ -16,6 +16,15 @@
     <finalName>${jar.name}</finalName>
     <sourceDirectory>${project.basedir}/../src/main/java</sourceDirectory>
     <testSourceDirectory>${project.basedir}/../src/test/java</testSourceDirectory>
+        <resources>
+       <resource>
+         <directory>src/main/java</directory>
+         <excludes>
+            <exclude>**/org/goobi/process/*</exclude>
+         </excludes>
+       </resource>
+    </resources>
+    
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
