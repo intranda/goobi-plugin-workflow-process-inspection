@@ -16,6 +16,27 @@
 
     <composite:implementation>
 
+
+
+<style>
+table.select > tbody tr {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  justify-content: flex-start;
+}
+
+table.select > tbody tr td {
+padding: 0px;
+}
+
+table.select > tbody tr td label {
+margin-left: 10px;
+}
+
+
+</style>
+
         <h:form
             styleClass="form-horizontal form-bordered">
             <div class="dataTables_wrapper col-md-12">
@@ -90,7 +111,7 @@
                         </tr>
                     </thead>
                     <ui:repeat
-                        var="zdbItem"
+                        var="process"
                         value="#{NavigationForm.workflowPlugin.processPaginator.list}"
                         varStatus="status">
                         <tr role="row">
@@ -108,7 +129,7 @@
                                                     <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
                                                 </td>
                                                 <td style="border: none !important; padding: 2px; white-space: normal;">
-                                                    <h:outputText value="#{zdbItem.getMetadataValue(metadata)}" />
+                                                    <h:outputText value="#{process.getMetadataValue(metadata)}" />
                                                 </td>
                                             </tr>
                                     </ui:repeat>
@@ -117,40 +138,29 @@
 
                             <!-- Vorgangsdatum -->
                             <td>
-                                      <h:outputText value="#{zdbItem.process.titel}">
+                                      <h:outputText value="#{process.process.titel}">
                                 </h:outputText>
 
                             </td>
 
                             <td>
-                                <h:outputText value="#{zdbItem.process.erstellungsdatumAsString}">
+                                <h:outputText value="#{process.process.erstellungsdatumAsString}">
                                 </h:outputText>
                             </td>
 
                             <!-- Buttons -->
                             <td class="width200">
-
-
-                                <!-- Metadaten-Schaltknopf - Allow writing -->
-                                <h:commandLink
-                                    action="#{NavigationForm.workflowPlugin.openProcess}"
-                                    id="action15"
-                                    rel="tooltip"
-                                    title="#{msgs.metadatenBearbeiten}"
-                                    pt:aria-label="#{msgs.metadatenBearbeiten}">
-                                    <i class="btn fa fa-book " />
-
-                                    <f:setPropertyActionListener
-                                        value="edit"
-                                        target="#{NavigationForm.workflowPlugin.editionMode}" />
-                                    <f:setPropertyActionListener
-                                        value="#{item}"
-                                        target="#{NavigationForm.workflowPlugin.process}" />
-
-                                </h:commandLink>
-
-
-
+                                <h:selectOneRadio
+                                    value="#{process.selectedAction}"
+                                    styleClass="select"
+                                    id="select">
+                                    <f:selectItems
+                                        var="item"
+                                        value="#{NavigationForm.workflowPlugin.options}"
+                                        itemLabel="#{item.label}"
+                                        itemValue="#{item.label}" />
+                                    <f:ajax execute="@this" render="@this"/>
+                                </h:selectOneRadio>
                             </td>
                         </tr>
                     </ui:repeat>
@@ -238,6 +248,17 @@
                 </div>
 
             </div>
+
+
+ <button
+                                    class="btn btn-success font-size-s margin-sides-10"
+                                    aria-label="#{msgs.executeChanges}"
+                                    jsf:action="#{NavigationForm.workflowPlugin.executeChanges}"
+                                 >
+                                    <i class="fa fa-angle-double-right"></i>
+                                    <f:ajax render="@form" />
+                                </button>
+
 
         </h:form>
 

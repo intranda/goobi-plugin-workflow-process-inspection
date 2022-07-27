@@ -3,8 +3,12 @@
     <!-- current open/inwork/error step -->
     <stepName>Manueller Kontrollschritt</stepName>
     
-    <!-- name of the inspection step to open or skip -->
-    <inspectionStepName>Rückstellung Prüfung einer E-Publikation</inspectionStepName>
+
+    <step stepName="Rückstellung Prüfung einer E-Publikation" changeType="open" label="Manuelle Prüfung"/>
+    <step stepName="" changeType="nothing" label="Nichts" default="true"/>
+    <step stepName="Rückstellung Prüfung einer E-Publikation" changeType="disable" label="Weiter zu aDIS"/>
+
+   
     
     <!-- metadata to display in process list -->
     <metadata>TitleDocMain</metadata>

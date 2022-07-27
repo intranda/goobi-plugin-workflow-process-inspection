@@ -11,16 +11,16 @@ public class ExtendendProcess implements DatabaseObject {
 
     @Getter
     @Setter
-    private String action = "nothing";
+    private String selectedAction;
 
-    @Getter
-    private String[] possibleActions = { "disableInspection", "nothing", "enableInspection" };
+
 
     @Getter
     private Process process;
 
-    public ExtendendProcess(Process p) {
+    public ExtendendProcess(Process p, String defaultValue) {
         process = p;
+        selectedAction = defaultValue;
     }
 
     @Override

@@ -20,6 +20,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ExtendedProcessManager implements IManager {
 
+    private String defaultValue;
+
+    public ExtendedProcessManager(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
     @Override
     public List<? extends DatabaseObject> getList(String order, String filter, Integer start, Integer count, Institution institution) {
         try {
@@ -40,7 +46,7 @@ public class ExtendedProcessManager implements IManager {
         }
     }
 
-    public static int getProcessCount(String stepName) throws SQLException {
+    public int getProcessCount(String stepName) throws SQLException {
         Connection connection = null;
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT count(1) FROM prozesse WHERE ProzesseID in ( ");
@@ -56,7 +62,7 @@ public class ExtendedProcessManager implements IManager {
         }
     }
 
-    public static List<ExtendendProcess> getProcesses(String order, String stepName, Integer start, Integer count) throws SQLException {
+    public List<ExtendendProcess> getProcesses(String order, String stepName, Integer start, Integer count) throws SQLException {
         Connection connection = null;
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT prozesse.* FROM prozesse WHERE ProzesseID in ( ");
@@ -73,7 +79,7 @@ public class ExtendedProcessManager implements IManager {
             List<Process> ret = new QueryRunner().query(connection, sql.toString(), ProcessManager.resultSetToProcessListHandler, stepName);
             List<ExtendendProcess> answer = new ArrayList<>(ret.size());
             for (Process p : ret) {
-                answer.add(new ExtendendProcess(p));
+                answer.add(new ExtendendProcess(p, defaultValue));
             }
             return answer;
         } finally {
