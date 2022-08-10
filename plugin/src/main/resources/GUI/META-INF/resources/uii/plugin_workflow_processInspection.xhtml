@@ -18,27 +18,24 @@
 
 
 
-<style>
-table.select > tbody tr {
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  justify-content: flex-start;
+        <style>
+table.select>tbody tr {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    justify-content: flex-start;
 }
 
-table.select > tbody tr td {
-padding: 0px;
+table.select>tbody tr td {
+    padding: 0px;
 }
 
-table.select > tbody tr td label {
-margin-left: 10px;
+table.select>tbody tr td label {
+    margin-left: 10px;
 }
-
-
 </style>
 
-        <h:form
-            styleClass="form-horizontal form-bordered">
+        <h:form styleClass="form-horizontal form-bordered">
             <div class="dataTables_wrapper col-md-12">
                 <!-- search field -->
                 <div class="dataTables_length">
@@ -82,7 +79,7 @@ margin-left: 10px;
                             <th
                                 scope="col"
                                 role="columnheader"
-                                class="tableColumnOverflow maxwidth200"
+                                class="tableColumnOverflow maxWidth200"
                                 aria-sort="#{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'ascending' :'none'}">
                                 <button
                                     class="button-link"
@@ -97,11 +94,20 @@ margin-left: 10px;
                                     <f:ajax render="@form" />
                                 </button>
                             </th>
-
-
-
-
-
+                            <th
+                                scope="col"
+                                role="columnheader"
+                                class="tableColumnOverflow"
+                                style="width: 200px;">
+                                <h:outputText value="#{msgs.plugin_workflow_processinspection_image}" />
+                            </th>
+                            <th
+                                scope="col"
+                                role="columnheader"
+                                class="tableColumnOverflow"
+                                style="width: 500px;">
+                                <h:outputText value="#{msgs.plugin_workflow_processinspection_fulltext}" />
+                            </th>
 
                             <!-- Buttons -->
                             <intranda:columnheader
@@ -124,21 +130,21 @@ margin-left: 10px;
                                         value="#{NavigationForm.workflowPlugin.metadataList}"
                                         varStatus="metadatastatus"
                                         id="metadatalist">
-                                            <tr>
-                                                <td style="border: none !important; padding: 2px; vertical-align: top;">
-                                                    <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
-                                                </td>
-                                                <td style="border: none !important; padding: 2px; white-space: normal;">
-                                                    <h:outputText value="#{process.getMetadataValue(metadata)}" />
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td style="border: none !important; padding: 2px; vertical-align: top;">
+                                                <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
+                                            </td>
+                                            <td style="border: none !important; padding: 2px; white-space: normal;">
+                                                <h:outputText value="#{process.getMetadataValue(metadata)}" />
+                                            </td>
+                                        </tr>
                                     </ui:repeat>
                                 </table>
                             </td>
 
                             <!-- Vorgangsdatum -->
                             <td>
-                                      <h:outputText value="#{process.process.titel}">
+                                <h:outputText value="#{process.process.titel}">
                                 </h:outputText>
 
                             </td>
@@ -146,6 +152,21 @@ margin-left: 10px;
                             <td>
                                 <h:outputText value="#{process.process.erstellungsdatumAsString}">
                                 </h:outputText>
+                            </td>
+                            <td>
+                                <canvas
+                                    class="thumb-canvas"
+                                    data-image_small="#{process.getThumbnailUrl(250)}"
+                                    data-image_large="#{process.getThumbnailUrl(750)}"
+                                    id="thumbnail-#{process.process.id}">
+					</canvas>
+                            </td>
+
+                            <td>
+                                <h:outputText
+                                    style="word-break: break-word; hyphens: auto;"
+                                    value="#{process.fulltext}"
+                                    escape="false" />
                             </td>
 
                             <!-- Buttons -->
@@ -159,7 +180,9 @@ margin-left: 10px;
                                         value="#{NavigationForm.workflowPlugin.options}"
                                         itemLabel="#{item.label}"
                                         itemValue="#{item.label}" />
-                                    <f:ajax execute="@this" render="@this"/>
+                                    <f:ajax
+                                        execute="@this"
+                                        render="@this" />
                                 </h:selectOneRadio>
                             </td>
                         </tr>
@@ -250,19 +273,22 @@ margin-left: 10px;
             </div>
 
 
- <button
-                                    class="btn btn-success font-size-s margin-sides-10"
-                                    aria-label="#{msgs.executeChanges}"
-                                    jsf:action="#{NavigationForm.workflowPlugin.executeChanges}"
-                                 >
-                                    <i class="fa fa-angle-double-right"></i>
-                                    <f:ajax render="@form" />
-                                </button>
+            <button
+                class="btn btn-success font-size-s margin-sides-10 pull-right"
+                aria-label="#{msgs.executeChanges}"
+                jsf:action="#{NavigationForm.workflowPlugin.executeChanges}">
+                <h:outputText value="#{msgs.executeChanges}" />
+                <f:ajax render="@form" />
+            </button>
 
 
         </h:form>
 
-
+        <script type="text/javascript">
+                                    window.onload = function() {
+                                        loadImages();
+                                    }
+                                </script>
 
 
     </composite:implementation>

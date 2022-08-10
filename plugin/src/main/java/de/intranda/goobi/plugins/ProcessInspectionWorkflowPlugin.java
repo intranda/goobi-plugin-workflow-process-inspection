@@ -33,7 +33,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin {
 
     @Getter
-    private String title = "intranda_workflow_processInspection";
+    private String title = "intranda_workflow_processinspection";
 
     // name of the current open step
     private String processStepName;
@@ -85,13 +85,6 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
 
     }
 
-    /*
-    - display thumbnail image, if possible (pdf only?)
-    - generate fulltext
-    - option to send process to a special inspection task for individual processes
-    - option to skip special inspection task for individual processes
-     */
-
     private void loadProcesses() {
         ExtendedProcessManager m = new ExtendedProcessManager(defaultValue);
         processPaginator = new ExtendedProcessPaginator("prozesse.titel", processStepName, m);
@@ -105,7 +98,7 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
     }
 
     public void executeChanges() {
-        for (DatabaseObject dbObj : processPaginator.getList()) {
+        for (DatabaseObject dbObj : processPaginator.getList()) { //NOSONAR
             ExtendendProcess ep = (ExtendendProcess) dbObj;
             String selectedAction = ep.getSelectedAction();
             StepChange action = null;
