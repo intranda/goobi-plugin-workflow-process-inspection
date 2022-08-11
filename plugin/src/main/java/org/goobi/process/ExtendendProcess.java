@@ -134,7 +134,8 @@ public class ExtendendProcess implements DatabaseObject {
 
         // check if thumb folder contains an image - use it
         try {
-            Path thumbsDirectory = Paths.get(process.getThumbsDirectory(), process.getTitel() + "_media");
+            Path thumbsDirectory = Paths.get(process.getImagesDirectory(), process.getTitel() + "_thumbs");
+
             if (StorageProvider.getInstance().isFileExists(thumbsDirectory)) {
                 List<Path> images = StorageProvider.getInstance().listFiles(thumbsDirectory.toString(), NIOFileUtils.imageNameFilter);
                 if (!images.isEmpty()) {
