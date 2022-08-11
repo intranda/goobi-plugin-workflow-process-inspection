@@ -17,7 +17,6 @@ import org.goobi.beans.Process;
 import org.goobi.production.cli.helper.StringPair;
 
 import de.sub.goobi.helper.FacesContextHelper;
-import de.sub.goobi.helper.NIOFileUtils;
 import de.sub.goobi.helper.StorageProvider;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
@@ -137,7 +136,7 @@ public class ExtendendProcess implements DatabaseObject {
             Path thumbsDirectory = Paths.get(process.getImagesDirectory(), process.getTitel() + "_thumbs");
 
             if (StorageProvider.getInstance().isFileExists(thumbsDirectory)) {
-                List<Path> images = StorageProvider.getInstance().listFiles(thumbsDirectory.toString(), NIOFileUtils.imageNameFilter);
+                List<Path> images = StorageProvider.getInstance().listFiles(thumbsDirectory.toString());
                 if (!images.isEmpty()) {
                     return images.get(0).toString();
                 }
