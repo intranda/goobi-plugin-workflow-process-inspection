@@ -46,15 +46,15 @@ public class ExtendedProcessManager implements IManager {
         }
     }
 
-    public int getProcessCount(String stepName) throws SQLException {
+    public int getProcessCount(String filter) throws SQLException {
         Connection connection = null;
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT count(1) FROM prozesse WHERE ProzesseID in ( ");
-        sql.append("SELECT schritte.prozesseID FROM schritte WHERE titel = ? AND Bearbeitungsstatus IN (1,2,5)) AND prozesse.istTemplate = false ");
+        sql.append(filter);
 
         try {
             connection = MySQLHelper.getInstance().getConnection();
-            return new QueryRunner().query(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, stepName);
+            return new QueryRunner().query(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler);
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -62,11 +62,11 @@ public class ExtendedProcessManager implements IManager {
         }
     }
 
-    public List<ExtendendProcess> getProcesses(String order, String stepName, Integer start, Integer count) throws SQLException {
+    public List<ExtendendProcess> getProcesses(String order, String filter, Integer start, Integer count) throws SQLException {
         Connection connection = null;
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT prozesse.* FROM prozesse WHERE ProzesseID in ( ");
-        sql.append("SELECT schritte.prozesseID FROM schritte WHERE titel = ? AND Bearbeitungsstatus IN (1,2,5)) AND prozesse.istTemplate = false ");
+        sql.append(filter);
 
         if (order != null && !order.isEmpty()) {
             sql.append(" ORDER BY " + order);
@@ -76,7 +76,7 @@ public class ExtendedProcessManager implements IManager {
         }
         try {
             connection = MySQLHelper.getInstance().getConnection();
-            List<Process> ret = new QueryRunner().query(connection, sql.toString(), ProcessManager.resultSetToProcessListHandler, stepName);
+            List<Process> ret = new QueryRunner().query(connection, sql.toString(), ProcessManager.resultSetToProcessListHandler);
             List<ExtendendProcess> answer = new ArrayList<>(ret.size());
             for (Process p : ret) {
                 answer.add(new ExtendendProcess(p, defaultValue));
@@ -90,15 +90,15 @@ public class ExtendedProcessManager implements IManager {
     }
 
     @Override
-    public List<Integer> getIdList(String order, String stepName, Institution institution) {
+    public List<Integer> getIdList(String order, String filter, Institution institution) {
         Connection connection = null;
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT prozesse.ProzesseID FROM prozesse WHERE ProzesseID in ( ");
-        sql.append("SELECT schritte.prozesseID FROM schritte WHERE titel = ? AND Bearbeitungsstatus IN (1,2,5)) AND prozesse.istTemplate = false ");
+        sql.append(filter);
 
         try {
             connection = MySQLHelper.getInstance().getConnection();
-            return new QueryRunner().query(connection, sql.toString(), MySQLHelper.resultSetToIntegerListHandler, stepName);
+            return new QueryRunner().query(connection, sql.toString(), MySQLHelper.resultSetToIntegerListHandler);
         } catch (SQLException e) {
             log.error(e);
         } finally {

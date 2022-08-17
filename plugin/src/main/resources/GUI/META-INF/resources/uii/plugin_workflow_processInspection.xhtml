@@ -33,23 +33,65 @@ table.select>tbody tr td {
 table.select>tbody tr td label {
     margin-left: 10px;
 }
+
+.searchRow {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+}
+
+.flexField {
+    flex: 0 1 25%;
+}
 </style>
 
-        <h:form styleClass="form-horizontal form-bordered">
-            <div class="dataTables_wrapper col-md-12">
-                <!-- search field -->
+        <h:form
+            styleClass="form-horizontal form-bordered"
+            id="searchform">
+            <!-- search field -->
+
+            <!-- search box -->
+            <div class="dataTables_wrapper flow">
                 <div class="dataTables_length">
                     <h:outputText value="#{msgs.treffer}: #{NavigationForm.workflowPlugin.processPaginator.totalResults}" />
                 </div>
-                
-                <!-- search box -->
+                <div class="row searchRow">
+
+                    <h:selectOneMenu
+                        id="searchoption_select"
+                        styleClass="form-control flexField"
+                        value="#{NavigationForm.workflowPlugin.selectedField}"
+                        pt:aria-label="searchfield">
+                        <f:selectItem
+                            itemValue=""
+                            itemLabel="#{msgs.plugin_dashboard_delivery_anyField}" />
+                        <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
+                    </h:selectOneMenu>
+
+                    <x:inputText
+                        id="searchvalue_input"
+                        pt:aria-label="searchvalue"
+                        styleClass="form-control flexField"
+                        value="#{NavigationForm.workflowPlugin.searchValue}">
+                    </x:inputText>
+
+                    <button
+                        jsf:id="newSearch"
+                        class="btn btn-primary-400"
+                        title="#{msgs.search}"
+                        jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}">
+                        <h:outputText value="#{msgs.search}" />
+                    </button>
+                </div>
+
+
 
                 <!-- +++++++++++++++++  Display as table ++++++++++++++++++++++++ -->
                 <table
                     role="grid"
                     id="processTable"
                     class="table table-hover table-nomargin dataTable table-bordered responsive">
-                    
+
                     <!-- ### Columnheader row ### -->
                     <thead>
                         <tr role="row">
@@ -133,9 +175,11 @@ table.select>tbody tr td label {
                                         value="#{NavigationForm.workflowPlugin.metadataList}"
                                         varStatus="metadatastatus"
                                         id="metadatalist">
-                                         <ui:fragment rendered="#{process.getMetadataValue(metadata) != ''}">
+                                        <ui:fragment rendered="#{process.getMetadataValue(metadata) != ''}">
                                             <tr>
-                                                <td class="fw-bold" style="border: none !important; padding: 2px; vertical-align: top;">
+                                                <td
+                                                    class="fw-bold"
+                                                    style="border: none !important; padding: 2px; vertical-align: top;">
                                                     <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
                                                 </td>
                                                 <td style="border: none !important; padding: 2px; white-space: normal;">

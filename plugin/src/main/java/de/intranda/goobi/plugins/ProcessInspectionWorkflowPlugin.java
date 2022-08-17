@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
+
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.goobi.beans.DatabaseObject;
 import org.goobi.beans.Step;
@@ -51,6 +54,15 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
 
     private String defaultValue;
 
+    @Getter
+    private List<SelectItem> metadataFields = new ArrayList<>();
+    @Getter
+    @Setter
+    private String selectedField;
+    @Getter
+    @Setter
+    private String searchValue;
+
     private ExtendedProcessPaginator processPaginator = null;
 
     @Override
@@ -83,11 +95,29 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
             }
         }
 
+        for (String metadata : metadataList) {
+            metadataFields.add(new SelectItem(metadata, Helper.getTranslation("process_grid_" + metadata)));
+        }
+
     }
 
-    private void loadProcesses() {
+    public void loadProcesses() {
         ExtendedProcessManager m = new ExtendedProcessManager(defaultValue);
-        processPaginator = new ExtendedProcessPaginator("prozesse.titel", processStepName, m);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT schritte.prozesseID FROM schritte WHERE titel = '");
+        sb.append(processStepName);
+        sb.append("' AND Bearbeitungsstatus IN (1,2,5)) AND prozesse.istTemplate = false ");
+
+        if (StringUtils.isBlank(selectedField) && StringUtils.isNotBlank(searchValue)) {
+            sb.append("AND (prozesse.ProzesseID IN (SELECT DISTINCT processid FROM metadata WHERE MATCH (value) AGAINST ('\"+*"
+                    + StringEscapeUtils.escapeSql(searchValue) + "* ' IN BOOLEAN MODE))) ");
+        } else if (StringUtils.isNotBlank(selectedField) && StringUtils.isNotBlank(searchValue)) {
+            sb.append("AND (prozesse.ProzesseID IN (SELECT DISTINCT processid FROM metadata WHERE metadata.name =  '" + selectedField
+                    + "' AND value LIKE '%" + StringEscapeUtils.escapeSql(searchValue) + "%' )) ");
+        }
+
+        processPaginator = new ExtendedProcessPaginator("prozesse.titel", sb.toString(), m);
     }
 
     public ExtendedProcessPaginator getProcessPaginator() {
