@@ -41,12 +41,15 @@ table.select>tbody tr td label {
                 <div class="dataTables_length">
                     <h:outputText value="#{msgs.treffer}: #{NavigationForm.workflowPlugin.processPaginator.totalResults}" />
                 </div>
+                
+                <!-- search box -->
 
                 <!-- +++++++++++++++++  Display as table ++++++++++++++++++++++++ -->
                 <table
                     role="grid"
                     id="processTable"
                     class="table table-hover table-nomargin dataTable table-bordered responsive">
+                    
                     <!-- ### Columnheader row ### -->
                     <thead>
                         <tr role="row">
@@ -130,22 +133,184 @@ table.select>tbody tr td label {
                                         value="#{NavigationForm.workflowPlugin.metadataList}"
                                         varStatus="metadatastatus"
                                         id="metadatalist">
-                                        <tr>
-                                            <td style="border: none !important; padding: 2px; vertical-align: top;">
-                                                <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
-                                            </td>
-                                            <td style="border: none !important; padding: 2px; white-space: normal;">
-                                                <h:outputText value="#{process.getMetadataValue(metadata)}" />
-                                            </td>
-                                        </tr>
+                                         <ui:fragment rendered="#{process.getMetadataValue(metadata) != ''}">
+                                            <tr>
+                                                <td class="fw-bold" style="border: none !important; padding: 2px; vertical-align: top;">
+                                                    <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
+                                                </td>
+                                                <td style="border: none !important; padding: 2px; white-space: normal;">
+                                                    <h:outputText value="#{process.getMetadataValue(metadata)}" />
+                                                </td>
+                                            </tr>
+                                        </ui:fragment>
                                     </ui:repeat>
                                 </table>
                             </td>
 
                             <!-- Vorgangsdatum -->
                             <td>
-                                <h:outputText value="#{process.process.titel}">
-                                </h:outputText>
+                                <button
+                                    type="button"
+                                    class="button-link font-black"
+                                    jsf:rendered="#{!process.process.panelAusgeklappt}"
+                                    title="#{process.process.titel}"
+                                    jsf:id="displayDetails"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <i class="fa fa-angle-right margin-right-5"></i>
+                                    <h:outputText value="#{process.process.titelLokalisiert}" />
+                                    <f:setPropertyActionListener
+                                        target="#{process.process.panelAusgeklappt}"
+                                        value="true" />
+                                    <f:ajax render="@form" />
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="button-link font-black"
+                                    jsf:rendered="#{process.process.panelAusgeklappt}"
+                                    title="#{process.process.titel}"
+                                    jsf:id="hideDetails"
+                                    aria-haspopup="true"
+                                    aria-expanded="true">
+                                    <i class="fa fa-angle-down margin-right-5"></i>
+                                    <h:outputText value="#{process.process.titelLokalisiert}" />
+                                    <f:setPropertyActionListener
+                                        target="#{process.process.panelAusgeklappt}"
+                                        value="false" />
+                                    <f:ajax render="@form" />
+                                </button>
+
+                                <h:panelGroup rendered="#{process.process.panelAusgeklappt}">
+                                    <div class="box">
+                                        <div class="box-title">
+                                            <h3>
+                                                <i class="fa fa-list"></i>
+                                                #{msgs.details}
+                                            </h3>
+                                        </div>
+                                        <div class="box-content nopadding">
+
+                                            <x:dataTable
+                                                styleClass="table table-hover table-bordered"
+                                                id="prozessdetails"
+                                                var="step"
+                                                value="#{process.process.schritteList}">
+
+                                                <h:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="#{msgs.nr}" />
+                                                    </f:facet>
+                                                    <h:outputText
+                                                        value="#{step.reihenfolge}"
+                                                        styleClass="#{step.bearbeitungsstatusEnum == 'DEACTIVATED'?'font-light':''}" />
+                                                </h:column>
+
+                                                <h:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText
+                                                            value="#{msgs.titel}"
+                                                            style="white-space: normal;" />
+                                                    </f:facet>
+                                                    <h:panelGroup rendered="#{step.typAutomatisch}">
+                                                        <i
+                                                            class="fa fa-cogs font-light margin-right-10"
+                                                            title="#{msgs.automatischerSchritt}" />
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{not step.typAutomatisch}">
+                                                        <i
+                                                            class="fa fa-user-o font-light margin-right-10"
+                                                            title="#{msgs.normalerSchritt}" />
+                                                    </h:panelGroup>
+                                                    <h:outputText
+                                                        value="#{step.titelLokalisiert}"
+                                                        title="#{step.titel}"
+                                                        style="white-space: normal;"
+                                                        styleClass="#{step.reihenfolge}_id #{step.bearbeitungsstatusEnum == 'DEACTIVATED'?'font-light':''}" />
+                                                </h:column>
+
+                                                <h:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="#{msgs.status}" />
+                                                    </f:facet>
+
+                                                    <ul class="colors small13">
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'LOCKED'}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                title="#{msgs.statusGesperrt}"
+                                                                rel="tooltip" />
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'OPEN'}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                title="#{msgs.statusOffen}"
+                                                                rel="tooltip" />
+                                                        </h:panelGroup>
+
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DONE' and HelperForm.anonymized}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                rel="tooltip"
+                                                                title="#{step.bearbeitungsstatusEnum.title} #{step.editTypeEnum.title}" />
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and HelperForm.anonymized}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                rel="tooltip"
+                                                                title="#{step.bearbeitungsstatusEnum.title}: #{step.editTypeEnum.title}" />
+                                                        </h:panelGroup>
+
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DONE' and !HelperForm.anonymized}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                rel="tooltip"
+                                                                title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and !HelperForm.anonymized}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                rel="tooltip"
+                                                                title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and !HelperForm.anonymized}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                rel="tooltip"
+                                                                title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and HelperForm.anonymized}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                rel="tooltip"
+                                                                title="#{step.bearbeitungsstatusEnum.title}: #{step.editTypeEnum.title}" />
+                                                        </h:panelGroup>
+
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DEACTIVATED'}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                title="#{step.bearbeitungsstatusEnum.title}"
+                                                                rel="tooltip" />
+                                                        </h:panelGroup>
+
+                                                        <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INFLIGHT'}">
+                                                            <li
+                                                                class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                title="#{msgs.statusInFlight}"
+                                                                data-toggle="tooltip"></li>
+                                                        </h:panelGroup>
+                                                    </ul>
+                                                    <h:outputText
+                                                        value="#{step.bearbeitungsstatusEnum.title}"
+                                                        rendered="#{LoginForm.myBenutzer.uiMode=='low_vision'}" />
+                                                </h:column>
+
+                                            </x:dataTable>
+
+                                        </div>
+                                    </div>
+
+                                </h:panelGroup>
 
                             </td>
 
