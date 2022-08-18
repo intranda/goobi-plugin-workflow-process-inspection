@@ -53,6 +53,8 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
     private String sortField;
 
     private String defaultValue;
+    private boolean showFulltext = true;
+    private boolean showThumbnail = true;
 
     @Getter
     private List<SelectItem> metadataFields = new ArrayList<>();
@@ -98,11 +100,13 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
         for (String metadata : metadataList) {
             metadataFields.add(new SelectItem(metadata, Helper.getTranslation("process_grid_" + metadata)));
         }
+        showFulltext = config.getBoolean("/showFulltext");
+        showThumbnail = config.getBoolean("/showThumbnail");
 
     }
 
     public void loadProcesses() {
-        ExtendedProcessManager m = new ExtendedProcessManager(defaultValue);
+        ExtendedProcessManager m = new ExtendedProcessManager(defaultValue, showFulltext, showThumbnail);
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT schritte.prozesseID FROM schritte WHERE titel = '");

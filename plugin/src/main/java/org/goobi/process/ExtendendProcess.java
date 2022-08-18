@@ -32,17 +32,19 @@ public class ExtendendProcess implements DatabaseObject {
     @Setter
     private String selectedAction;
 
-    private boolean showFulltext = true;
-    private boolean showThumbnail = true;
+    private boolean showFulltext;
+    private boolean showThumbnail;
 
     private String fulltext;
 
     @Getter
     private Process process;
 
-    public ExtendendProcess(Process p, String defaultValue) {
+    public ExtendendProcess(Process p, String defaultValue, boolean showFulltext, boolean showThumbnail) {
         process = p;
         selectedAction = defaultValue;
+        this.showFulltext = showFulltext;
+        this.showThumbnail = showThumbnail;
     }
 
     @Override

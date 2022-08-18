@@ -1,15 +1,15 @@
 <config_plugin>
 
-    <!-- current open/inwork/error step -->
-    <stepName>Manueller Kontrollschritt und Freigabe</stepName>
-    
+	<!-- current open/inwork/error step -->
+	<stepName>Manueller Kontrollschritt und Freigabe</stepName>
 
-    <step stepName="Rückstellung und Prüfung eines Vorgangs" changeType="open" label="Manuelle Prüfung"/>
-    <step stepName="" changeType="nothing" label="Keine Änderung" default="true"/>
-    <step stepName="Rückstellung und Prüfung eines Vorgangs" changeType="disable" label="Weiter zu aDIS"/>
+	<step stepName="Rückstellung und Prüfung eines Vorgangs" changeType="open" label="Manuelle Prüfung" />
+	<step stepName="" changeType="nothing" label="Keine Änderung" default="true" />
+	<step stepName="Rückstellung und Prüfung eines Vorgangs" changeType="disable" label="Weiter zu aDIS" />
 
-   
-    
+	<showFulltext>true</showFulltext>
+	<showThumbnail>true</showThumbnail>
+
 	<!-- metadata to display in process list -->
 	<metadata>TitleDocMain</metadata>
 	<metadata>TitleDocSub1</metadata>

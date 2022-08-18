@@ -21,9 +21,13 @@ import lombok.extern.log4j.Log4j2;
 public class ExtendedProcessManager implements IManager {
 
     private String defaultValue;
+    private boolean showFulltext;
+    private boolean showThumbnail;
 
-    public ExtendedProcessManager(String defaultValue) {
+    public ExtendedProcessManager(String defaultValue, boolean showFulltext, boolean showThumbnail) {
         this.defaultValue = defaultValue;
+        this.showFulltext = showFulltext;
+        this.showThumbnail = showThumbnail;
     }
 
     @Override
@@ -79,7 +83,7 @@ public class ExtendedProcessManager implements IManager {
             List<Process> ret = new QueryRunner().query(connection, sql.toString(), ProcessManager.resultSetToProcessListHandler);
             List<ExtendendProcess> answer = new ArrayList<>(ret.size());
             for (Process p : ret) {
-                answer.add(new ExtendendProcess(p, defaultValue));
+                answer.add(new ExtendendProcess(p, defaultValue, showFulltext, showThumbnail));
             }
             return answer;
         } finally {
