@@ -28,11 +28,13 @@ table.select>tbody tr {
 
 table.select>tbody tr td {
     padding: 0px;
+	border: 0;
 }
 
 table.select>tbody tr td label {
     margin-left: 10px;
 }
+
 
 .searchRow {
     display: flex;
@@ -66,41 +68,51 @@ table.select>tbody tr td label {
 						
 				            <!-- search box -->
 				            <div class="dataTables_wrapper flow">
+				                
 				                <div class="dataTables_length">
 				                    <h:outputText value="#{msgs.treffer}: #{NavigationForm.workflowPlugin.processPaginator.totalResults}" />
-				               
-					                <div class="row searchRow">
-					
-					                    <h:selectOneMenu
-					                        id="searchoption_select"
-					                        styleClass="form-control flexField"
-					                        value="#{NavigationForm.workflowPlugin.selectedField}"
-					                        pt:aria-label="searchfield">
-					                        <f:selectItem
-					                            itemValue=""
-					                            itemLabel="#{msgs.plugin_dashboard_delivery_anyField}" />
-					                        <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
-					                    </h:selectOneMenu>
-					
-					                    <x:inputText
-					                        id="searchvalue_input"
-					                        pt:aria-label="searchvalue"
-					                        styleClass="form-control flexField"
-					                        value="#{NavigationForm.workflowPlugin.searchValue}">
-					                    </x:inputText>
-					
-					                    <button
-					                        jsf:id="newSearch"
-					                        class="btn btn-primary-400"
-					                        title="#{msgs.search}"
-					                        jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}">
-					                        <h:outputText value="#{msgs.search}" />
-					                    </button>
-					                </div>
-				 				</div>
+				               	</div>
+				                <div class="dataTables_filter">
 				
+				                    <h:selectOneMenu
+				                        id="searchoption_select"
+				                        styleClass="form-control flexField"
+				                        value="#{NavigationForm.workflowPlugin.selectedField}"
+				                        pt:aria-label="searchfield">
+				                        <f:selectItem
+				                            itemValue=""
+				                            itemLabel="#{msgs.plugin_dashboard_delivery_anyField}" />
+				                        <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
+				                    </h:selectOneMenu>
 				
-				                <!-- +++++++++++++++++  Display as table ++++++++++++++++++++++++ -->
+									 <div class="input-group input-group">
+					                        <span class="input-group-addon">
+					                            <span class="fa fa-search" />
+					                        </span>
+					                        <h:inputText
+					                            id="searchvalue_input"
+					                            pt:aria-label="searchvalue"
+					                            styleClass="form-control searchfield"
+					                            value="#{NavigationForm.workflowPlugin.searchValue}">
+					                            <f:passThroughAttribute
+					                                name="placeholder"
+					                                value="#{msgs.plugin_workflow_processinspection_searchterm}" />
+					                            <f:passThroughAttribute
+					                                name="aria-label"
+					                                value="#{msgs.plugin_workflow_processinspection_searchterm}" />
+					                        </h:inputText>
+					                        <div class="input-group-btn">
+					                            <button
+					                                jsf:id="newSearch"
+					                                jsf:forceId="true"
+					                                class="btn"
+					                                style="text-align: center; line-height: 100%; padding: 0px 10px"
+					                                jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}">#{msgs.search}</button>
+					                        </div>
+					                    </div>
+								</div>
+				
+								<!-- LIST OF ITEMS -->
 				                <table
 				                    role="grid"
 				                    id="processTable"
@@ -109,12 +121,17 @@ table.select>tbody tr td label {
 				                    <!-- ### Columnheader row ### -->
 				                    <thead>
 				                        <tr role="row">
-				                            <!-- Embedded Metadata -->
-				                            <intranda:columnheader
-				                                addClass="tableColumnOverflow maxWidth300"
-				                                value="#{msgs.metadata}"
-				                                sortable="false" />
-				
+				                            
+				                            <!-- THUMBNAIL -->
+				                            <th
+				                                scope="col"
+				                                role="columnheader"
+				                                class="tableColumnOverflow"
+				                                style="width: 200px;">
+				                                <h:outputText value="#{msgs.plugin_workflow_processinspection_image}" />
+				                            </th>
+				                            
+				                            <!-- PROCESS NAMW -->
 				                            <th
 				                                scope="col"
 				                                role="columnheader"
@@ -133,9 +150,9 @@ table.select>tbody tr td label {
 				                                    <f:ajax render="@form" />
 				                                </button>
 				                            </th>
-				
-				
-				                            <th
+				                            
+				                            <!-- PROCESS DATE -->
+				                             <th
 				                                scope="col"
 				                                role="columnheader"
 				                                class="tableColumnOverflow maxWidth200"
@@ -153,13 +170,14 @@ table.select>tbody tr td label {
 				                                    <f:ajax render="@form" />
 				                                </button>
 				                            </th>
-				                            <th
-				                                scope="col"
-				                                role="columnheader"
-				                                class="tableColumnOverflow"
-				                                style="width: 200px;">
-				                                <h:outputText value="#{msgs.plugin_workflow_processinspection_image}" />
-				                            </th>
+				                            
+				                            <!-- EMBEDDED METADATA -->
+				                            <intranda:columnheader
+				                                addClass="tableColumnOverflow maxWidth300"
+				                                value="#{msgs.metadata}"
+				                                sortable="false" />
+				
+											<!-- FULLTEXT -->
 				                            <th
 				                                scope="col"
 				                                role="columnheader"
@@ -168,7 +186,7 @@ table.select>tbody tr td label {
 				                                <h:outputText value="#{msgs.plugin_workflow_processinspection_fulltext}" />
 				                            </th>
 				
-				                            <!-- Buttons -->
+				                            <!-- ACTION -->
 				                            <intranda:columnheader
 				                                addClass="width200"
 				                                value="#{msgs.auswahl}"
@@ -181,29 +199,17 @@ table.select>tbody tr td label {
 				                        varStatus="status">
 				                        <tr role="row">
 				
-				                            <!-- Embedded Metadata -->
-				                            <td>
-				                                <table class="table table-borderless">
-				                                    <ui:repeat
-				                                        var="metadata"
-				                                        value="#{NavigationForm.workflowPlugin.metadataList}"
-				                                        varStatus="metadatastatus"
-				                                        id="metadatalist">
-				                                        <ui:fragment rendered="#{process.getMetadataValue(metadata) != ''}">
-				                                            <tr>
-				                                                <td class="tableColumnWidth100 smallertablecell fw-bold">
-				                                                    <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
-				                                                </td>
-				                                                <td class="tableColumnWidth100 smallertablecell">
-				                                                    <h:outputText value="#{process.getMetadataValue(metadata)}" />
-				                                                </td>
-				                                            </tr>
-				                                        </ui:fragment>
-				                                    </ui:repeat>
-				                                </table>
+											<!-- THUMBNAIL -->
+											<td>
+				                                <canvas
+				                                    class="thumb-canvas"
+				                                    data-image_small="#{process.getThumbnailUrl(250)}"
+				                                    data-image_large="#{process.getThumbnailUrl(750)}"
+				                                    id="thumbnail-#{process.process.id}">
+												</canvas>
 				                            </td>
 				
-				                            <!-- Vorgangsdatum -->
+				                            <!-- PROCESS NAME -->
 				                            <td>
 				                                <button
 				                                    type="button"
@@ -369,20 +375,36 @@ table.select>tbody tr td label {
 				                                </h:panelGroup>
 				
 				                            </td>
-				
+				                           
+				                           	<!-- PROCESS DATE -->
 				                            <td>
 				                                <h:outputText value="#{process.process.erstellungsdatumAsString}">
 				                                </h:outputText>
 				                            </td>
+				                           
+											<!-- EMBEDDED METADATA -->
 				                            <td>
-				                                <canvas
-				                                    class="thumb-canvas"
-				                                    data-image_small="#{process.getThumbnailUrl(250)}"
-				                                    data-image_large="#{process.getThumbnailUrl(750)}"
-				                                    id="thumbnail-#{process.process.id}">
-									</canvas>
+				                                <table class="table table-borderless">
+				                                    <ui:repeat
+				                                        var="metadata"
+				                                        value="#{NavigationForm.workflowPlugin.metadataList}"
+				                                        varStatus="metadatastatus"
+				                                        id="metadatalist">
+				                                        <ui:fragment rendered="#{process.getMetadataValue(metadata) != ''}">
+				                                            <tr>
+				                                                <td class="tableColumnWidth100 smallertablecell fw-bold">
+				                                                    <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
+				                                                </td>
+				                                                <td class="tableColumnWidth100 smallertablecell">
+				                                                    <h:outputText value="#{process.getMetadataValue(metadata)}" />
+				                                                </td>
+				                                            </tr>
+				                                        </ui:fragment>
+				                                    </ui:repeat>
+				                                </table>
 				                            </td>
-				
+				                            
+				                            <!-- FULLTEXT -->
 				                            <td>
 				                                <h:outputText
 				                                    style="word-break: break-word; hyphens: auto;"
@@ -390,7 +412,7 @@ table.select>tbody tr td label {
 				                                    escape="false" />
 				                            </td>
 				
-				                            <!-- Buttons -->
+				                            <!-- BUTTONS -->
 				                            <td class="width200">
 				                                <h:selectOneRadio
 				                                    value="#{process.selectedAction}"
@@ -410,97 +432,96 @@ table.select>tbody tr td label {
 				                    </ui:repeat>
 				                </table>
 				
-				                <div
-				                    class="dataTables_info"
-				                    style="float: left;"></div>
-				                <div class="dataTables_paginate">
+				                <div class="dataTables_info" style="float: left; padding-right:10px; width:100%">
+					                
+				                   <div class="dataTables_paginate">
+					                    <ui:fragment id="zdb_paginator">
+					                        <!-- paginator -->
+					                        <h:panelGroup rendered="#{NavigationForm.workflowPlugin.processPaginator.totalResults > LoginForm.myBenutzer.tabellengroesse}">
+					
+					                            <div class="pull-right">
+					
+					                                <button
+					                                    class="btn font-size-s margin-sides-10"
+					                                    aria-label="#{msgs.firstPage}"
+					                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveFirst}"
+					                                    jsf:id="navfirst">
+					                                    <i class="fa fa-angle-double-left"></i>
+					                                    <f:ajax render="@form" />
+					                                </button>
+					                                <button
+					                                    class="btn btn-primary font-size-s navigator-previous"
+					                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMovePrevious}"
+					                                    jsf:id="navprev">
+					                                    <i class="fa fa-angle-left"></i>
+					                                    <h:outputText value=" #{msgs.pagePrevious}" />
+					                                    <f:ajax render="@form" />
+					                                </button>
+					
+					                                <div class="margin-sides-10">
+					                                    <!-- aktuelle Seite anzeigen -->
+					                                    <x:outputText
+					                                        id="zdb_txtMoveTo1"
+					                                        forceId="true"
+					                                        value="#{msgs.seite} #{NavigationForm.workflowPlugin.processPaginator.pageNumberCurrent} #{msgs.von} #{NavigationForm.workflowPlugin.processPaginator.pageNumberLast}"
+					                                        onclick="document.getElementById('zdb_txtMoveTo2').style.display='inline';
+					                   document.getElementById('zdb_txtMoveTo1').style.display='none';
+					                   document.getElementById('zdb_txtMoveTo2').focus();
+					                   document.getElementById('zdb_txtMoveTo2').select();" />
+					
+					                                    <!-- Seite direkt anspringen -->
+					                                    <x:inputText
+					                                        id="zdb_txtMoveTo2"
+					                                        forceId="true"
+					                                        value="#{NavigationForm.workflowPlugin.processPaginator.zdb_txtMoveTo}"
+					                                        style="display:none;width:30px"
+					                                        required="true"
+					                                        onblur="document.getElementById('zdb_txtMoveTo2').style.display='none';document.getElementById('zdb_txtMoveTo1').style.display='inline';"
+					                                        onkeypress="return submitEnter('zdb_cmdMoveTo',event)" />
+					                                    <x:commandButton
+					                                        action="#{NavigationForm.Reload}"
+					                                        id="zdb_cmdMoveTo"
+					                                        forceId="true"
+					                                        value="go"
+					                                        style="display:none">
+					                                    </x:commandButton>
+					                                </div>
+					
+					                                <button
+					                                    class="btn btn-primary font-size-s navigator-next"
+					                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveNext}"
+					                                    jsf:id="navnext">
+					                                    <h:outputText value="#{msgs.pageNext} " />
+					                                    <i class="fa fa-angle-right"></i>
+					                                    <f:ajax render="@form" />
+					                                </button>
+					                                <button
+					                                    class="btn font-size-s margin-sides-10"
+					                                    aria-label="#{msgs.lastPage}"
+					                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveLast}"
+					                                    jsf:id="navlast">
+					                                    <i class="fa fa-angle-double-right"></i>
+					                                    <f:ajax render="@form" />
+					                                </button>
+					                            </div>
+					                        </h:panelGroup>
+					
+					                        <!-- /paginator -->
+					
+					                    </ui:fragment>
+					                </div>
 				
-				                    <ui:fragment id="zdb_paginator">
-				                        <!-- paginator -->
-				                        <h:panelGroup rendered="#{NavigationForm.workflowPlugin.processPaginator.totalResults > LoginForm.myBenutzer.tabellengroesse}">
+									<button
+						                class="btn margin-sides-10 font-size-s btn-success pull-right"
+						                aria-label="#{msgs.plugin_workflow_processinspection_executeChance}"
+						                jsf:action="#{NavigationForm.workflowPlugin.executeChanges}">
+						                <h:outputText value="#{msgs.plugin_workflow_processinspection_executeChance}" />
+						                <f:ajax render="@form" />
+						            </button>
 				
-				                            <div class="pull-right">
-				
-				                                <button
-				                                    class="btn font-size-s margin-sides-10"
-				                                    aria-label="#{msgs.firstPage}"
-				                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveFirst}"
-				                                    jsf:id="navfirst">
-				                                    <i class="fa fa-angle-double-left"></i>
-				                                    <f:ajax render="@form" />
-				                                </button>
-				                                <button
-				                                    class="btn btn-primary font-size-s navigator-previous"
-				                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMovePrevious}"
-				                                    jsf:id="navprev">
-				                                    <i class="fa fa-angle-left"></i>
-				                                    <h:outputText value=" #{msgs.pagePrevious}" />
-				                                    <f:ajax render="@form" />
-				                                </button>
-				
-				                                <div class="margin-sides-10">
-				                                    <!-- aktuelle Seite anzeigen -->
-				                                    <x:outputText
-				                                        id="zdb_txtMoveTo1"
-				                                        forceId="true"
-				                                        value="#{msgs.seite} #{NavigationForm.workflowPlugin.processPaginator.pageNumberCurrent} #{msgs.von} #{NavigationForm.workflowPlugin.processPaginator.pageNumberLast}"
-				                                        onclick="document.getElementById('zdb_txtMoveTo2').style.display='inline';
-				                   document.getElementById('zdb_txtMoveTo1').style.display='none';
-				                   document.getElementById('zdb_txtMoveTo2').focus();
-				                   document.getElementById('zdb_txtMoveTo2').select();" />
-				
-				                                    <!-- Seite direkt anspringen -->
-				                                    <x:inputText
-				                                        id="zdb_txtMoveTo2"
-				                                        forceId="true"
-				                                        value="#{NavigationForm.workflowPlugin.processPaginator.zdb_txtMoveTo}"
-				                                        style="display:none;width:30px"
-				                                        required="true"
-				                                        onblur="document.getElementById('zdb_txtMoveTo2').style.display='none';document.getElementById('zdb_txtMoveTo1').style.display='inline';"
-				                                        onkeypress="return submitEnter('zdb_cmdMoveTo',event)" />
-				                                    <x:commandButton
-				                                        action="#{NavigationForm.Reload}"
-				                                        id="zdb_cmdMoveTo"
-				                                        forceId="true"
-				                                        value="go"
-				                                        style="display:none">
-				                                    </x:commandButton>
-				                                </div>
-				
-				                                <button
-				                                    class="btn btn-primary font-size-s navigator-next"
-				                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveNext}"
-				                                    jsf:id="navnext">
-				                                    <h:outputText value="#{msgs.pageNext} " />
-				                                    <i class="fa fa-angle-right"></i>
-				                                    <f:ajax render="@form" />
-				                                </button>
-				                                <button
-				                                    class="btn font-size-s margin-sides-10"
-				                                    aria-label="#{msgs.lastPage}"
-				                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveLast}"
-				                                    jsf:id="navlast">
-				                                    <i class="fa fa-angle-double-right"></i>
-				                                    <f:ajax render="@form" />
-				                                </button>
-				                            </div>
-				                        </h:panelGroup>
-				
-				                        <!-- /paginator -->
-				
-				                    </ui:fragment>
-				                </div>
-				
-				            </div>
-				
-				
-				            <button
-				                class="btn btn-success font-size-s margin-sides-10 pull-right"
-				                aria-label="#{msgs.executeChanges}"
-				                jsf:action="#{NavigationForm.workflowPlugin.executeChanges}">
-				                <h:outputText value="#{msgs.executeChanges}" />
-				                <f:ajax render="@form" />
-				            </button>
+					            </div>
+			
+							</div>
 		
 						</div>
 					</div>
