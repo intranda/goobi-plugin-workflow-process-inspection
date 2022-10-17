@@ -54,6 +54,40 @@ select[id$="searchoption_select"] {
 	padding: 4px !important;
 }
 
+
+.dataTables__filters::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.dataTables__table {
+  overflow-y: scroll;
+}
+
+td button i.margin-right-5 {
+	display: inline;
+}
+
+/* Utilities */
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.fulltext-output {
+	max-width: 480px;
+	min-width: 240px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 8px;
+	background-color: #f1f3f4;
+}
+
+td .actions-table {
+	width: 200px;
+}
+
 </style>
 
         <h:form
@@ -75,6 +109,7 @@ select[id$="searchoption_select"] {
 				            <!-- search box -->
 				            <div class="dataTables_wrapper flow">
 
+											<div class="dataTables__filters">
 				                <div class="dataTables_length">
 				                    <h:outputText value="#{msgs.treffer}: #{NavigationForm.workflowPlugin.processPaginator.totalResults}" />
 				               	</div>
@@ -121,12 +156,16 @@ select[id$="searchoption_select"] {
 				                        <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
 				                    </h:selectOneMenu>
 												</div>
+											</div>
 
 								<!-- LIST OF ITEMS -->
+
+				        <div class="dataTables__table">
+
 				                <table
 				                    role="grid"
 				                    id="processTable"
-				                    class="table table-hover table-nomargin dataTable table-bordered responsive">
+				                    class="table table-hover table-nomargin dataTable table-bordered responsive process-table">
 
 				                    <!-- ### Columnheader row ### -->
 				                    <thead>
@@ -191,8 +230,9 @@ select[id$="searchoption_select"] {
 				                            <th
 				                                scope="col"
 				                                role="columnheader"
-				                                class="tableColumnOverflow"
+				                                class="tableColumnOverflow process-table__header--fulltext"
 				                                style="width: 500px;">
+
 				                                <h:outputText value="#{msgs.plugin_workflow_processinspection_fulltext}" />
 				                            </th>
 
@@ -416,17 +456,33 @@ select[id$="searchoption_select"] {
 
 				                            <!-- FULLTEXT -->
 				                            <td>
+
+																			<div
+																				class="fulltext-output"
+																				jsf:rendered="#{not empty process.fulltext}"
+																				>
+																				<!--
+																					<h:outputText
+																							style="word-break: break-word; hyphens: auto;"
+																							value="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+																							escape="false" />
+																				-->
+																					<script>
+																						console.log('#{process.fulltext}')
+																					</script>
+
 				                                <h:outputText
 				                                    style="word-break: break-word; hyphens: auto;"
 				                                    value="#{process.fulltext}"
 				                                    escape="false" />
+																			</div>
 				                            </td>
 
 				                            <!-- BUTTONS -->
 				                            <td class="width200">
 				                                <h:selectOneRadio
 				                                    value="#{process.selectedAction}"
-				                                    styleClass="select"
+				                                    styleClass="select actions-table"
 				                                    id="select">
 				                                    <f:selectItems
 				                                        var="item"
@@ -441,6 +497,8 @@ select[id$="searchoption_select"] {
 				                        </tr>
 				                    </ui:repeat>
 				                </table>
+
+								</div>
 
 				                <div class="dataTables_info" style="float: left; padding-right:10px; width:100%">
 
