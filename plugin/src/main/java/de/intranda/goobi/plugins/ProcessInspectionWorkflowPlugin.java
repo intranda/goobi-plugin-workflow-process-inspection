@@ -35,6 +35,8 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @Log4j2
 public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin {
 
+    private static final long serialVersionUID = -3466634138399406874L;
+
     @Getter
     private String title = "intranda_workflow_processinspection";
 
@@ -42,7 +44,7 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
     private String processStepName;
 
     @Getter
-    private List<StepChange> options;
+    private transient List<StepChange> options;
 
     // metadata to display
     @Getter

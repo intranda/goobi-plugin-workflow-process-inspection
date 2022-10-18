@@ -529,26 +529,26 @@ td .actions-table {
 					                                <div class="margin-sides-10">
 					                                    <!-- aktuelle Seite anzeigen -->
 					                                    <x:outputText
-					                                        id="zdb_txtMoveTo1"
+					                                        id="txtMoveTo1"
 					                                        forceId="true"
 					                                        value="#{msgs.seite} #{NavigationForm.workflowPlugin.processPaginator.pageNumberCurrent} #{msgs.von} #{NavigationForm.workflowPlugin.processPaginator.pageNumberLast}"
-					                                        onclick="document.getElementById('zdb_txtMoveTo2').style.display='inline';
-					                   document.getElementById('zdb_txtMoveTo1').style.display='none';
-					                   document.getElementById('zdb_txtMoveTo2').focus();
-					                   document.getElementById('zdb_txtMoveTo2').select();" />
+					                                        onclick="document.getElementById('txtMoveTo2').style.display='inline';
+					                   document.getElementById('txtMoveTo1').style.display='none';
+					                   document.getElementById('txtMoveTo2').focus();
+					                   document.getElementById('txtMoveTo2').select();" />
 
 					                                    <!-- Seite direkt anspringen -->
 					                                    <x:inputText
-					                                        id="zdb_txtMoveTo2"
+					                                        id="txtMoveTo2"
 					                                        forceId="true"
-					                                        value="#{NavigationForm.workflowPlugin.processPaginator.zdb_txtMoveTo}"
+					                                        value="#{NavigationForm.workflowPlugin.processPaginator.txtMoveTo}"
 					                                        style="display:none;width:30px"
 					                                        required="true"
-					                                        onblur="document.getElementById('zdb_txtMoveTo2').style.display='none';document.getElementById('zdb_txtMoveTo1').style.display='inline';"
-					                                        onkeypress="return submitEnter('zdb_cmdMoveTo',event)" />
+					                                        onblur="document.getElementById('txtMoveTo2').style.display='none';document.getElementById('txtMoveTo1').style.display='inline';"
+					                                        onkeypress="return submitEnter('cmdMoveTo',event)" />
 					                                    <x:commandButton
 					                                        action="#{NavigationForm.Reload}"
-					                                        id="zdb_cmdMoveTo"
+					                                        id="cmdMoveTo"
 					                                        forceId="true"
 					                                        value="go"
 					                                        style="display:none">

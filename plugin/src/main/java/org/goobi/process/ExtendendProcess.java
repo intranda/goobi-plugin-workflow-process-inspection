@@ -28,6 +28,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ExtendendProcess implements DatabaseObject {
 
+    private static final long serialVersionUID = 8737437351140618471L;
+
     @Getter
     @Setter
     private String selectedAction;
@@ -160,15 +162,15 @@ public class ExtendendProcess implements DatabaseObject {
 
         switch (extension.toLowerCase()) {
             case "pdf":
-                representativeImage = "uii/template/img/goobi_3d_object_placeholder.png?version=1";
+                representativeImage = "uii/template/img/goobi_placeholder_pdf.png?version=1";
                 break;
             case "epub":
             case "mobi":
             case "azw":
-                representativeImage = "uii/thumbnail_epub.jpg?version=1";
+                representativeImage = "uii/template/img/goobi_placeholder_epub.png?version=1";
                 break;
             default:
-                representativeImage = "uii/template/img/goobi_3d_object_placeholder.png?version=1";
+                representativeImage = "uii/template/img/goobi_placeholder_notFound.png?version=1";
 
         }
 
