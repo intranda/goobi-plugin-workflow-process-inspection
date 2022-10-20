@@ -1,0 +1,40 @@
+<config_plugin>
+
+	<!-- current open/inwork/error step -->
+	<stepName>Manueller Kontrollschritt und Freigabe</stepName>
+
+	<step stepName="Rückstellung und Prüfung eines Vorgangs" changeType="open" label="Manuelle Prüfung" />
+	<step stepName="" changeType="nothing" label="Keine Änderung" default="true" />
+	<step stepName="Rückstellung und Prüfung eines Vorgangs" changeType="disable" label="Weiter zu aDIS" />
+
+	<showFulltext>true</showFulltext>
+	<showThumbnail>true</showThumbnail>
+
+	<!-- metadata to display in process list -->
+	<metadata>TitleDocMain</metadata>
+	<metadata>TitleDocSub1</metadata>
+	<metadata>PublicationYear</metadata>
+	<metadata>DocLanguage</metadata>
+	<metadata>OtherCorporate</metadata>
+	<metadata>Copyright</metadata>
+	<metadata>AccessLicense</metadata>
+	<metadata>Author</metadata>
+	<metadata>ActionNote</metadata>
+	<metadata>CatalogIDDigital</metadata>
+	<metadata>DDC</metadata>
+	<metadata>Edition</metadata>
+	<metadata>FSK</metadata>
+	<metadata>ISSN</metadata>
+	<metadata>ISBN</metadata>
+	<metadata>ISMN</metadata>
+	<metadata>UPC</metadata>
+	<metadata>EAN</metadata>
+	<metadata>OrderNumber</metadata>
+	<metadata>DOI</metadata>
+	<metadata>URN</metadata>
+	<metadata>Handle</metadata>
+	<metadata>Identifikation</metadata>
+	<metadata>NoteStatementOfResponsibility</metadata>
+	<metadata>PublisherCorporate</metadata>
+	<metadata>PublisherName</metadata>
+</config_plugin>
