@@ -37,4 +37,9 @@
 	<metadata>NoteStatementOfResponsibility</metadata>
 	<metadata>PublisherCorporate</metadata>
 	<metadata>PublisherName</metadata>
+	
+	<property>Institution</property>
+	<property>UserName</property>
+	<property>non existing property</property>		
+	
 </config_plugin>

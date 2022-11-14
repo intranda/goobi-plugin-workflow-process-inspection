@@ -49,6 +49,9 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
     // metadata to display
     @Getter
     private List<String> metadataList;
+    
+    @Getter
+    private List<String> propertyList;
 
     @Getter
     @Setter
@@ -88,6 +91,8 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
         processStepName = config.getString("/stepName", "");
         metadataList = Arrays.asList(config.getStringArray("/metadata"));
 
+        propertyList =  Arrays.asList(config.getStringArray("/property"));
+        
         options = new ArrayList<>();
 
         List<HierarchicalConfiguration> subList = config.configurationsAt("/step");

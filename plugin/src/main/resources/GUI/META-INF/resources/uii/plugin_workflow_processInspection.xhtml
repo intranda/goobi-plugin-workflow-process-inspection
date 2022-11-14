@@ -89,6 +89,10 @@ td .actions-table {
 	width: 200px;
 }
 
+.border-top {
+border-top: 1px solid #ddd;
+}
+
 </style>
 
         <h:form
@@ -452,7 +456,35 @@ td .actions-table {
 				                                            </tr>
 				                                        </ui:fragment>
 				                                    </ui:repeat>
-				                                </table>
+
+
+
+														<ui:repeat var="propName"
+															value="#{NavigationForm.workflowPlugin.propertyList}"
+															varStatus="propertystatus" id="propertyList">
+
+															<ui:repeat var="property"
+																value="#{process.process.eigenschaften}">
+																<ui:fragment
+																	rendered="#{property.titel eq propName and property.wert != ''}">
+																	<tr class="#{propertystatus.index == 0 ? 'border-top':''}">
+																		<td
+																			class="tableColumnWidth100 smallertablecell fw-bold">
+																			<h:outputText
+																				value="#{msgs['process_grid_'.concat(propName)]}:" />
+																		</td>
+																		<td class="tableColumnWidth100 smallertablecell">
+																			<h:outputText value="#{property.wert}" />
+																		</td>
+																	</tr>
+																	</ui:fragment>
+															</ui:repeat>
+
+
+
+														</ui:repeat>
+
+													</table>
 				                            </td>
 
 				                            <!-- FULLTEXT -->
