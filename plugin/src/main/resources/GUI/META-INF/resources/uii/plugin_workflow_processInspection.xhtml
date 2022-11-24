@@ -194,7 +194,7 @@ border-top: 1px solid #ddd;
 				                                <button
 				                                    class="button-link"
 				                                    style="width: 100%; text-align: left;"
-				                                    jsf:action="#{NavigationForm.workflowPlugin.getProcessPaginator}"
+				                                    jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
 				                                    aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
 				                                    <h:outputText value="#{msgs.prozessTitel}" />
 				                                    <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'fa-sort-asc':'fa-sort'}"></span>
@@ -214,7 +214,7 @@ border-top: 1px solid #ddd;
 				                                <button
 				                                    class="button-link"
 				                                    style="width: 100%; text-align: left;"
-				                                    jsf:action="#{NavigationForm.workflowPlugin.getProcessPaginator}"
+				                                    jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
 				                                    aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'creationDateAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
 				                                    <h:outputText value="#{msgs.vorgangsdatum}" />
 				                                    <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ?'fa-sort-asc':'fa-sort'}"></span>

@@ -55,7 +55,7 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
 
     @Getter
     @Setter
-    private String sortField;
+    private String sortField ="creationDateDesc";
 
     private String defaultValue;
     private boolean showFulltext = true;
@@ -128,8 +128,32 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
                     + "' AND value LIKE '%" + StringEscapeUtils.escapeSql(searchValue) + "%' )) ");
         }
 
-        processPaginator = new ExtendedProcessPaginator("prozesse.titel", sb.toString(), m);
+        processPaginator = new ExtendedProcessPaginator(getOrder(), sb.toString(), m);
     }
+    
+    
+    private String getOrder() {
+        String value = "prozesse.erstellungsdatum desc";
+        switch (sortField) {
+            case "titelAsc":
+                value = "prozesse.titel asc";
+                break;
+            case "titelDesc":
+                value = "prozesse.titel desc";
+                break;
+            case "creationDateAsc":
+                value = "prozesse.erstellungsdatum asc";
+                break;
+            case "creationDateDesc":
+                value = "prozesse.erstellungsdatum desc";
+                break;
+            default:
+                // nothing
+        }
+        return value;
+    }
+
+    
 
     public ExtendedProcessPaginator getProcessPaginator() {
         if (processPaginator == null) {

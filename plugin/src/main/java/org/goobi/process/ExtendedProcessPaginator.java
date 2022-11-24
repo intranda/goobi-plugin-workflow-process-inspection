@@ -21,6 +21,7 @@ public class ExtendedProcessPaginator extends DatabasePaginator {
     public ExtendedProcessPaginator(String order, String filter, IManager manager) {
         super(order, filter, manager, "");
         institution = null;
+        this.order = order;
         try {
             totalResults = manager.getHitSize(order, filter, null);
             load();
