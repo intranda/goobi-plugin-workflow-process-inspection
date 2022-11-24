@@ -20,6 +20,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ExtendedProcessManager implements IManager {
 
+    private static final long serialVersionUID = 8643226374054415902L;
+    
     private String defaultValue;
     private boolean showFulltext;
     private boolean showThumbnail;
