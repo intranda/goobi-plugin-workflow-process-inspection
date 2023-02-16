@@ -123,13 +123,27 @@ public class ExtendendProcess implements DatabaseObject {
 
     }
 
-    public String getMetadataValue(String metadataName) {
+    public  String getMetadataValue(String metadataName) {
         for (StringPair sp : process.getMetadataList()) {
             if (sp.getOne().equals(metadataName)) {
                 return sp.getTwo();
             }
         }
         return "";
+    }
+
+
+    public String getAllMetadataValues(String metadataName) {
+        StringBuilder sb = new StringBuilder();
+        for (StringPair sp : process.getMetadataList()) {
+            if (sp.getOne().equals(metadataName)) {
+                if (sb.length()> 0) {
+                    sb.append(", ");
+                }
+                sb.append(sp.getTwo());
+            }
+        }
+        return sb.toString();
     }
 
     private String getRepresentativeImageAsString() {
