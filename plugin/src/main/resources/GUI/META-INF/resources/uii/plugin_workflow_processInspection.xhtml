@@ -193,7 +193,7 @@ td .actions-table {
                                                         class="button-link"
                                                         style="width: 100%; text-align: left;"
                                                         jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
-                                                        aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
+                                                        aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
                                                         <h:outputText value="#{msgs.prozessTitel}" />
                                                         <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'fa-sort-asc':'fa-sort'}"></span>
                                                         <f:setPropertyActionListener
