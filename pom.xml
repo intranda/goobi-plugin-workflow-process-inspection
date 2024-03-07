@@ -7,7 +7,7 @@
     <relativePath />
   </parent>
   <groupId>io.goobi.workflow.plugin</groupId>
-  <artifactId>plugin-workflow-processInspection</artifactId>
+  <artifactId>plugin-workflow-process-inspection</artifactId>
   <packaging>pom</packaging>
   <modules>
     <module>module-base</module>

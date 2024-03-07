@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.goobi.workflow.plugin</groupId>
-    <artifactId>plugin-workflow-processInspection</artifactId>
+    <artifactId>plugin-workflow-process-inspection</artifactId>
     <version>24.03-SNAPSHOT</version>
   </parent>
-  <artifactId>plugin-workflow-processInspection-base</artifactId>
+  <artifactId>plugin-workflow-process-inspection-base</artifactId>
   <packaging>jar</packaging>
 </project>
