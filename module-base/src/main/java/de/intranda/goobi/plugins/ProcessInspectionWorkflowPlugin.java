@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
-
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
@@ -26,6 +24,7 @@ import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.enums.StepStatus;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.persistence.managers.StepManager;
+import jakarta.faces.model.SelectItem;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -49,13 +48,13 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
     // metadata to display
     @Getter
     private List<String> metadataList;
-    
+
     @Getter
     private List<String> propertyList;
 
     @Getter
     @Setter
-    private String sortField ="creationDateDesc";
+    private String sortField = "creationDateDesc";
 
     private String defaultValue;
     private boolean showFulltext = true;
@@ -91,8 +90,8 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
         processStepName = config.getString("/stepName", "");
         metadataList = Arrays.asList(config.getStringArray("/metadata"));
 
-        propertyList =  Arrays.asList(config.getStringArray("/property"));
-        
+        propertyList = Arrays.asList(config.getStringArray("/property"));
+
         options = new ArrayList<>();
 
         List<HierarchicalConfiguration> subList = config.configurationsAt("/step");
@@ -130,8 +129,7 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
 
         processPaginator = new ExtendedProcessPaginator(getOrder(), sb.toString(), m);
     }
-    
-    
+
     private String getOrder() {
         String value = "prozesse.erstellungsdatum desc";
         switch (sortField) {
@@ -152,8 +150,6 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
         }
         return value;
     }
-
-    
 
     public ExtendedProcessPaginator getProcessPaginator() {
         if (processPaginator == null) {
