@@ -8,8 +8,9 @@
 		<exec executable="mvn">
 			<arg value="package"/>
 		</exec>
-		<copy file="module-main/target/plugin_intranda_workflow_${name}.jar" todir="/opt/digiverso/goobi/plugins/workflow/" overwrite="true"/>
-		<copy file="module-gui/target/plugin_intranda_workflow_${name}-GUI.jar" todir="/opt/digiverso/goobi/plugins/GUI/" overwrite="true"/>
+        <copy file="module-base/target/plugin-workflow-process-inspection-base.jar" todir="/opt/digiverso/goobi/plugins/workflow/" overwrite="true"/>
+        <copy file="module-gui/target/plugin-workflow-process-inspection-gui.jar" todir="/opt/digiverso/goobi/plugins/GUI/" overwrite="true"/>
+
 	</target>
 
 </project>
