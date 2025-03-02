@@ -8,9 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.DatabaseObject;
 import org.goobi.beans.Process;
@@ -21,6 +18,8 @@ import de.sub.goobi.helper.StorageProvider;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.metadaten.Image;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -123,7 +122,7 @@ public class ExtendendProcess implements DatabaseObject {
 
     }
 
-    public  String getMetadataValue(String metadataName) {
+    public String getMetadataValue(String metadataName) {
         for (StringPair sp : process.getMetadataList()) {
             if (sp.getOne().equals(metadataName)) {
                 return sp.getTwo();
@@ -132,12 +131,11 @@ public class ExtendendProcess implements DatabaseObject {
         return "";
     }
 
-
     public String getAllMetadataValues(String metadataName) {
         StringBuilder sb = new StringBuilder();
         for (StringPair sp : process.getMetadataList()) {
             if (sp.getOne().equals(metadataName)) {
-                if (sb.length()> 0) {
+                if (sb.length() > 0) {
                     sb.append(", ");
                 }
                 sb.append(sp.getTwo());
