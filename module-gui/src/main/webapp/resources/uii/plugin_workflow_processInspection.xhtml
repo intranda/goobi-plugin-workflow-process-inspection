@@ -8,7 +8,10 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
+    xmlns:section="http://goobi.io/section"
+    xmlns:table="http://goobi.io/table"
+    >
 
     <composite:interface>
     </composite:interface>
@@ -38,10 +41,6 @@ table.select>tbody tr td label {
     display: flex;
     gap: 4px;
     justify-content: flex-end;
-}
-
-select[id$="searchoption_select"] {
-    height: 28px;
 }
 
 .flexField {
@@ -94,536 +93,517 @@ td .actions-table {
             styleClass="form-horizontal form-bordered"
             id="searchform">
             <!-- search field -->
-
-            <div
-                class="row"
-                role="main">
-                <div class="col-sm-12">
-                    <div class="box box-color box-bordered">
-                        <div class="box-title">
-                            <h2>
-                                <i class="fa fa-compass"></i>
-                                <h:outputText value="#{myPageTitle}" />
-                            </h2>
-                        </div>
-                        <div class="box-content nopadding">
-
-                            <!-- search box -->
-                            <div class="dataTables_wrapper flow">
-
-                                <div class="dataTables__filters">
-                                    <div class="dataTables_length">
-                                        <h:outputText value="#{msgs.treffer}: #{NavigationForm.workflowPlugin.processPaginator.totalResults}" />
+            <section:section type="primary">
+                <section:header icon="compass" title="#{myPageTitle}"></section:header>
+                <section:body>
+                    <!-- search box -->
+                    <table:wrapper>
+                        <table:search>
+                            <table:hits>
+                                <h:outputText value="#{msgs.treffer}: #{NavigationForm.workflowPlugin.processPaginator.totalResults}" />
+                            </table:hits>
+                            <table:filter>
+                                <h:selectOneMenu
+                                    id="searchoption_select"
+                                    styleClass="form-select w-25"
+                                    value="#{NavigationForm.workflowPlugin.selectedField}"
+                                    pt:aria-label="searchfield">
+                                    <f:selectItem
+                                        itemValue=""
+                                        itemLabel="#{msgs.plugin_dashboard_delivery_anyField}" />
+                                    <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
+                                </h:selectOneMenu>
+                                <table:filter-input>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <span aria-hidden="true" class="fa fa-search" />
+                                        </span>
+                                        <h:inputText
+                                            id="searchvalue_input"
+                                            pt:aria-label="searchvalue"
+                                            styleClass="form-control searchfield"
+                                            value="#{NavigationForm.workflowPlugin.searchValue}">
+                                            <f:passThroughAttribute
+                                                name="placeholder"
+                                                value="#{msgs.plugin_workflow_processinspection_searchterm}" />
+                                            <f:passThroughAttribute
+                                                name="aria-label"
+                                                value="#{msgs.plugin_workflow_processinspection_searchterm}" />
+                                        </h:inputText>
+                                        <button
+                                            jsf:id="newSearch"
+                                            jsf:forceId="true"
+                                            class="btn btn-blank"
+                                            jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}">#{msgs.search}</button>
                                     </div>
+                                </table:filter-input>
+                            </table:filter>
+                        </table:search>
+                        <table:table id="processInspectionTable">
+                            <thead>
+                                <tr role="row">
 
+                                    <!-- THUMBNAIL -->
+                                    <th
+                                        scope="col"
+                                        role="columnheader"
+                                        class="tableColumnOverflow"
+                                        style="width: 200px;">
+                                        <h:outputText value="#{msgs.plugin_workflow_processinspection_image}" />
+                                    </th>
 
-                                    <div class="dataTables_filter">
-                                        <div class="input-group input-group">
-                                            <span class="input-group-addon">
-                                                <span class="fa fa-search" />
-                                            </span>
-                                            <h:inputText
-                                                id="searchvalue_input"
-                                                pt:aria-label="searchvalue"
-                                                styleClass="form-control searchfield"
-                                                value="#{NavigationForm.workflowPlugin.searchValue}">
-                                                <f:passThroughAttribute
-                                                    name="placeholder"
-                                                    value="#{msgs.plugin_workflow_processinspection_searchterm}" />
-                                                <f:passThroughAttribute
-                                                    name="aria-label"
-                                                    value="#{msgs.plugin_workflow_processinspection_searchterm}" />
-                                            </h:inputText>
-                                            <div class="input-group-btn">
-                                                <button
-                                                    jsf:id="newSearch"
-                                                    jsf:forceId="true"
-                                                    class="btn"
-                                                    style="text-align: center; line-height: 100%; padding: 0px 10px"
-                                                    jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}">#{msgs.search}</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <!-- PROCESS NAMW -->
+                                    <th
+                                        scope="col"
+                                        role="columnheader"
+                                        class="tableColumnOverflow maxWidth300"
+                                        aria-sort="#{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'ascending' :'none'}">
+                                        <button
+                                            class="button-link"
+                                            style="width: 100%; text-align: left;"
+                                            jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
+                                            aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
+                                            <h:outputText value="#{msgs.prozessTitel}" />
+                                            <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'fa-sort-asc':'fa-sort'}"></span>
+                                            <f:setPropertyActionListener
+                                                target="#{NavigationForm.workflowPlugin.sortField}"
+                                                value="#{NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'titelDesc' : 'titelAsc' }" />
+                                            <f:ajax render="@form" />
+                                        </button>
+                                    </th>
 
-                                    <div class="dataTables_filter">
+                                    <!-- PROCESS DATE -->
+                                    <th
+                                        scope="col"
+                                        role="columnheader"
+                                        class="tableColumnOverflow maxWidth200"
+                                        aria-sort="#{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'ascending' :'none'}">
+                                        <button
+                                            class="button-link"
+                                            style="width: 100%; text-align: left;"
+                                            jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
+                                            aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'creationDateAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
+                                            <h:outputText value="#{msgs.vorgangsdatum}" />
+                                            <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ?'fa-sort-asc':'fa-sort'}"></span>
+                                            <f:setPropertyActionListener
+                                                target="#{NavigationForm.workflowPlugin.sortField}"
+                                                value="#{NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'creationDateDesc' : 'creationDateAsc' }" />
+                                            <f:ajax render="@form" />
+                                        </button>
+                                    </th>
 
-                                        <h:selectOneMenu
-                                            id="searchoption_select"
-                                            styleClass="form-control flexField"
-                                            value="#{NavigationForm.workflowPlugin.selectedField}"
-                                            pt:aria-label="searchfield">
-                                            <f:selectItem
-                                                itemValue=""
-                                                itemLabel="#{msgs.plugin_dashboard_delivery_anyField}" />
-                                            <f:selectItems value="#{NavigationForm.workflowPlugin.metadataFields}" />
-                                        </h:selectOneMenu>
-                                    </div>
-                                </div>
+                                    <!-- EMBEDDED METADATA -->
+                                    <intranda:columnheader
+                                        addClass="tableColumnOverflow maxWidth300"
+                                        value="#{msgs.metadata}"
+                                        sortable="false" />
 
-                                <!-- LIST OF ITEMS -->
+                                    <!-- FULLTEXT -->
+                                    <th
+                                        scope="col"
+                                        role="columnheader"
+                                        class="tableColumnOverflow process-table__header--fulltext"
+                                        style="width: 500px;">
 
-                                <div class="dataTables__table">
+                                        <h:outputText value="#{msgs.plugin_workflow_processinspection_fulltext}" />
+                                    </th>
 
-                                    <table
-                                        role="grid"
-                                        id="processTable"
-                                        class="table table-hover table-nomargin dataTable table-bordered responsive process-table">
+                                    <!-- ACTION -->
+                                    <intranda:columnheader
+                                        addClass="width200"
+                                        value="#{msgs.auswahl}"
+                                        sortable="false" />
+                                </tr>
+                            </thead>
+                            <ui:repeat
+                                var="process"
+                                value="#{NavigationForm.workflowPlugin.processPaginator.list}"
+                                varStatus="status">
+                                <tr role="row">
 
-                                        <!-- ### Columnheader row ### -->
-                                        <thead>
-                                            <tr role="row">
+                                    <!-- THUMBNAIL -->
+                                    <td>
+                                        <canvas
+                                            class="thumb-canvas"
+                                            data-image_small="#{process.getThumbnailUrl(250)}"
+                                            data-image_large="#{process.getThumbnailUrl(750)}"
+                                            id="thumbnail-#{process.process.id}">
+                                    </canvas>
+                                    </td>
 
-                                                <!-- THUMBNAIL -->
-                                                <th
-                                                    scope="col"
-                                                    role="columnheader"
-                                                    class="tableColumnOverflow"
-                                                    style="width: 200px;">
-                                                    <h:outputText value="#{msgs.plugin_workflow_processinspection_image}" />
-                                                </th>
+                                    <!-- PROCESS NAME -->
+                                    <td>
+                                        <button
+                                            type="button"
+                                            class="button-link font-black"
+                                            jsf:rendered="#{!process.process.panelAusgeklappt}"
+                                            title="#{process.process.titel}"
+                                            jsf:id="displayDetails"
+                                            aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <span class="fa fa-angle-right margin-right-5"></span>
+                                            <h:outputText value="#{process.process.titelLokalisiert}" />
+                                            <f:setPropertyActionListener
+                                                target="#{process.process.panelAusgeklappt}"
+                                                value="true" />
+                                            <f:ajax render="@form" />
+                                        </button>
 
-                                                <!-- PROCESS NAMW -->
-                                                <th
-                                                    scope="col"
-                                                    role="columnheader"
-                                                    class="tableColumnOverflow maxWidth300"
-                                                    aria-sort="#{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'ascending' :'none'}">
-                                                    <button
-                                                        class="button-link"
-                                                        style="width: 100%; text-align: left;"
-                                                        jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
-                                                        aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
-                                                        <h:outputText value="#{msgs.prozessTitel}" />
-                                                        <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'fa-sort-asc':'fa-sort'}"></span>
-                                                        <f:setPropertyActionListener
-                                                            target="#{NavigationForm.workflowPlugin.sortField}"
-                                                            value="#{NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'titelDesc' : 'titelAsc' }" />
-                                                        <f:ajax render="@form" />
-                                                    </button>
-                                                </th>
+                                        <button
+                                            type="button"
+                                            class="button-link font-black"
+                                            jsf:rendered="#{process.process.panelAusgeklappt}"
+                                            title="#{process.process.titel}"
+                                            jsf:id="hideDetails"
+                                            aria-haspopup="true"
+                                            aria-expanded="true">
+                                            <span class="fa fa-angle-down margin-right-5"></span>
+                                            <h:outputText value="#{process.process.titelLokalisiert}" />
+                                            <f:setPropertyActionListener
+                                                target="#{process.process.panelAusgeklappt}"
+                                                value="false" />
+                                            <f:ajax render="@form" />
+                                        </button>
 
-                                                <!-- PROCESS DATE -->
-                                                <th
-                                                    scope="col"
-                                                    role="columnheader"
-                                                    class="tableColumnOverflow maxWidth200"
-                                                    aria-sort="#{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'ascending' :'none'}">
-                                                    <button
-                                                        class="button-link"
-                                                        style="width: 100%; text-align: left;"
-                                                        jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
-                                                        aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'creationDateAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
-                                                        <h:outputText value="#{msgs.vorgangsdatum}" />
-                                                        <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ?'fa-sort-asc':'fa-sort'}"></span>
-                                                        <f:setPropertyActionListener
-                                                            target="#{NavigationForm.workflowPlugin.sortField}"
-                                                            value="#{NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'creationDateDesc' : 'creationDateAsc' }" />
-                                                        <f:ajax render="@form" />
-                                                    </button>
-                                                </th>
-
-                                                <!-- EMBEDDED METADATA -->
-                                                <intranda:columnheader
-                                                    addClass="tableColumnOverflow maxWidth300"
-                                                    value="#{msgs.metadata}"
-                                                    sortable="false" />
-
-                                                <!-- FULLTEXT -->
-                                                <th
-                                                    scope="col"
-                                                    role="columnheader"
-                                                    class="tableColumnOverflow process-table__header--fulltext"
-                                                    style="width: 500px;">
-
-                                                    <h:outputText value="#{msgs.plugin_workflow_processinspection_fulltext}" />
-                                                </th>
-
-                                                <!-- ACTION -->
-                                                <intranda:columnheader
-                                                    addClass="width200"
-                                                    value="#{msgs.auswahl}"
-                                                    sortable="false" />
-                                            </tr>
-                                        </thead>
-                                        <ui:repeat
-                                            var="process"
-                                            value="#{NavigationForm.workflowPlugin.processPaginator.list}"
-                                            varStatus="status">
-                                            <tr role="row">
-
-                                                <!-- THUMBNAIL -->
-                                                <td>
-                                                    <canvas
-                                                        class="thumb-canvas"
-                                                        data-image_small="#{process.getThumbnailUrl(250)}"
-                                                        data-image_large="#{process.getThumbnailUrl(750)}"
-                                                        id="thumbnail-#{process.process.id}">
-												</canvas>
-                                                </td>
-
-                                                <!-- PROCESS NAME -->
-                                                <td>
-                                                    <button
-                                                        type="button"
-                                                        class="button-link font-black"
-                                                        jsf:rendered="#{!process.process.panelAusgeklappt}"
-                                                        title="#{process.process.titel}"
-                                                        jsf:id="displayDetails"
-                                                        aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                        <i class="fa fa-angle-right margin-right-5"></i>
-                                                        <h:outputText value="#{process.process.titelLokalisiert}" />
-                                                        <f:setPropertyActionListener
-                                                            target="#{process.process.panelAusgeklappt}"
-                                                            value="true" />
-                                                        <f:ajax render="@form" />
-                                                    </button>
-
-                                                    <button
-                                                        type="button"
-                                                        class="button-link font-black"
-                                                        jsf:rendered="#{process.process.panelAusgeklappt}"
-                                                        title="#{process.process.titel}"
-                                                        jsf:id="hideDetails"
-                                                        aria-haspopup="true"
-                                                        aria-expanded="true">
-                                                        <i class="fa fa-angle-down margin-right-5"></i>
-                                                        <h:outputText value="#{process.process.titelLokalisiert}" />
-                                                        <f:setPropertyActionListener
-                                                            target="#{process.process.panelAusgeklappt}"
-                                                            value="false" />
-                                                        <f:ajax render="@form" />
-                                                    </button>
-
-                                                    <h:panelGroup rendered="#{process.process.panelAusgeklappt}">
-                                                        <div class="box">
-                                                            <div class="box-title">
-                                                                <h3>
-                                                                    <i class="fa fa-list"></i>
-                                                                    #{msgs.details}
-                                                                </h3>
-                                                            </div>
-                                                            <div class="box-content nopadding">
-
-                                                                <h:dataTable
-                                                                    styleClass="table table-hover table-bordered"
-                                                                    id="prozessdetails"
-                                                                    var="step"
-                                                                    value="#{process.process.schritteList}">
-
-                                                                    <h:column>
-                                                                        <f:facet name="header">
-                                                                            <h:outputText value="#{msgs.nr}" />
-                                                                        </f:facet>
-                                                                        <h:outputText
-                                                                            value="#{step.reihenfolge}"
-                                                                            styleClass="#{step.bearbeitungsstatusEnum == 'DEACTIVATED'?'font-light':''}" />
-                                                                    </h:column>
-
-                                                                    <h:column>
-                                                                        <f:facet name="header">
-                                                                            <h:outputText
-                                                                                value="#{msgs.titel}"
-                                                                                style="white-space: normal;" />
-                                                                        </f:facet>
-                                                                        <h:panelGroup rendered="#{step.typAutomatisch}">
-                                                                            <i
-                                                                                class="fa fa-cogs font-light margin-right-10"
-                                                                                title="#{msgs.automatischerSchritt}" />
-                                                                        </h:panelGroup>
-                                                                        <h:panelGroup rendered="#{not step.typAutomatisch}">
-                                                                            <i
-                                                                                class="fa fa-user-o font-light margin-right-10"
-                                                                                title="#{msgs.normalerSchritt}" />
-                                                                        </h:panelGroup>
-                                                                        <h:outputText
-                                                                            value="#{step.titelLokalisiert}"
-                                                                            title="#{step.titel}"
-                                                                            style="white-space: normal;"
-                                                                            styleClass="#{step.reihenfolge}_id #{step.bearbeitungsstatusEnum == 'DEACTIVATED'?'font-light':''}" />
-                                                                    </h:column>
-
-                                                                    <h:column>
-                                                                        <f:facet name="header">
-                                                                            <h:outputText value="#{msgs.status}" />
-                                                                        </f:facet>
-
-                                                                        <ul class="colors small13">
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'LOCKED'}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    title="#{msgs.statusGesperrt}"
-                                                                                    rel="tooltip" />
-                                                                            </h:panelGroup>
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'OPEN'}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    title="#{msgs.statusOffen}"
-                                                                                    rel="tooltip" />
-                                                                            </h:panelGroup>
-
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DONE' and HelperForm.anonymized}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    rel="tooltip"
-                                                                                    title="#{step.bearbeitungsstatusEnum.title} #{step.editTypeEnum.title}" />
-                                                                            </h:panelGroup>
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and HelperForm.anonymized}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    rel="tooltip"
-                                                                                    title="#{step.bearbeitungsstatusEnum.title}: #{step.editTypeEnum.title}" />
-                                                                            </h:panelGroup>
-
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DONE' and !HelperForm.anonymized}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    rel="tooltip"
-                                                                                    title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
-                                                                            </h:panelGroup>
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and !HelperForm.anonymized}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    rel="tooltip"
-                                                                                    title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
-                                                                            </h:panelGroup>
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and !HelperForm.anonymized}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    rel="tooltip"
-                                                                                    title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
-                                                                            </h:panelGroup>
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and HelperForm.anonymized}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    rel="tooltip"
-                                                                                    title="#{step.bearbeitungsstatusEnum.title}: #{step.editTypeEnum.title}" />
-                                                                            </h:panelGroup>
-
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DEACTIVATED'}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    title="#{step.bearbeitungsstatusEnum.title}"
-                                                                                    rel="tooltip" />
-                                                                            </h:panelGroup>
-
-                                                                            <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INFLIGHT'}">
-                                                                                <li
-                                                                                    class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
-                                                                                    title="#{msgs.statusInFlight}"
-                                                                                    data-toggle="tooltip"></li>
-                                                                            </h:panelGroup>
-                                                                        </ul>
-                                                                        <h:outputText
-                                                                            value="#{step.bearbeitungsstatusEnum.title}"
-                                                                            rendered="#{LoginForm.myBenutzer.uiMode=='low_vision'}" />
-                                                                    </h:column>
-
-                                                                </h:dataTable>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </h:panelGroup>
-
-                                                </td>
-
-                                                <!-- PROCESS DATE -->
-                                                <td>
-                                                    <h:outputText value="#{process.process.erstellungsdatumAsString}">
-                                                    </h:outputText>
-                                                </td>
-
-                                                <!-- EMBEDDED METADATA -->
-                                                <td>
-                                                    <table class="table table-borderless">
-                                                        <ui:repeat
-                                                            var="metadata"
-                                                            value="#{NavigationForm.workflowPlugin.metadataList}"
-                                                            varStatus="metadatastatus"
-                                                            id="metadatalist">
-                                                            <ui:fragment rendered="#{process.getMetadataValue(metadata) != ''}">
-                                                                <tr>
-                                                                    <td class="tableColumnWidth100 smallertablecell fw-bold">
-                                                                        <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
-                                                                    </td>
-                                                                    <td class="tableColumnWidth100 smallertablecell">
-                                                                        <h:outputText value="#{process.getAllMetadataValues(metadata)}" />
-                                                                    </td>
-                                                                </tr>
-                                                            </ui:fragment>
-                                                        </ui:repeat>
-
-
-
-                                                        <ui:repeat
-                                                            var="propName"
-                                                            value="#{NavigationForm.workflowPlugin.propertyList}"
-                                                            varStatus="propertystatus"
-                                                            id="propertyList">
-
-                                                            <ui:repeat
-                                                                var="property"
-                                                                value="#{process.process.eigenschaften}">
-                                                                <ui:fragment rendered="#{property.titel eq propName and property.wert != ''}">
-                                                                    <tr class="#{propertystatus.index == 0 ? 'border-top':''}">
-                                                                        <td class="tableColumnWidth100 smallertablecell fw-bold">
-                                                                            <h:outputText value="#{msgs['process_grid_'.concat(propName)]}:" />
-                                                                        </td>
-                                                                        <td class="tableColumnWidth100 smallertablecell">
-                                                                            <h:outputText value="#{property.wert}" />
-                                                                        </td>
-                                                                    </tr>
-                                                                </ui:fragment>
-                                                            </ui:repeat>
-
-
-
-                                                        </ui:repeat>
-
-                                                    </table>
-                                                </td>
-
-                                                <!-- FULLTEXT -->
-                                                <td>
-
-                                                    <div
-                                                        class="fulltext-output"
-                                                        jsf:rendered="#{not empty process.fulltext}">
-                                                        <!--
-																					<h:outputText
-																							style="word-break: break-word; hyphens: auto;"
-																							value="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-																							escape="false" />
-																				-->
-
-
-                                                        <h:outputText
-                                                            style="word-break: break-word; hyphens: auto;"
-                                                            value="#{process.fulltext}"
-                                                            escape="false" />
-                                                    </div>
-                                                </td>
-
-                                                <!-- BUTTONS -->
-                                                <td class="width200">
-                                                    <h:selectOneRadio
-                                                        value="#{process.selectedAction}"
-                                                        styleClass="select actions-table"
-                                                        id="select">
-                                                        <f:selectItems
-                                                            var="item"
-                                                            value="#{NavigationForm.workflowPlugin.options}"
-                                                            itemLabel="#{item.label}"
-                                                            itemValue="#{item.label}" />
-                                                        <f:ajax
-                                                            execute="@this"
-                                                            render="@this" />
-                                                    </h:selectOneRadio>
-                                                </td>
-                                            </tr>
-                                        </ui:repeat>
-                                    </table>
-
-                                </div>
-
-                                <div
-                                    class="dataTables_info"
-                                    style="float: left; padding-right: 10px; width: 100%">
-
-                                    <div class="dataTables_paginate">
-                                        <ui:fragment id="zdb_paginator">
-                                            <!-- paginator -->
-                                            <h:panelGroup rendered="#{NavigationForm.workflowPlugin.processPaginator.totalResults > LoginForm.myBenutzer.tabellengroesse}">
-
-                                                <div class="pull-right">
-
-                                                    <button
-                                                        class="btn font-size-s margin-sides-10"
-                                                        aria-label="#{msgs.firstPage}"
-                                                        jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveFirst}"
-                                                        jsf:id="navfirst">
-                                                        <i class="fa fa-angle-double-left"></i>
-                                                        <f:ajax render="@form" />
-                                                    </button>
-                                                    <button
-                                                        class="btn btn-primary font-size-s navigator-previous"
-                                                        jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMovePrevious}"
-                                                        jsf:id="navprev">
-                                                        <i class="fa fa-angle-left"></i>
-                                                        <h:outputText value=" #{msgs.pagePrevious}" />
-                                                        <f:ajax render="@form" />
-                                                    </button>
-
-                                                    <div class="margin-sides-10">
-                                                        <!-- aktuelle Seite anzeigen -->
-                                                        <h:outputText
-                                                            id="txtMoveTo1"
-                                                            forceId="true"
-                                                            value="#{msgs.seite} #{NavigationForm.workflowPlugin.processPaginator.pageNumberCurrent} #{msgs.von} #{NavigationForm.workflowPlugin.processPaginator.pageNumberLast}"
-                                                            onclick="document.getElementById('txtMoveTo2').style.display='inline';
-					                   document.getElementById('txtMoveTo1').style.display='none';
-					                   document.getElementById('txtMoveTo2').focus();
-					                   document.getElementById('txtMoveTo2').select();" />
-
-                                                        <!-- Seite direkt anspringen -->
-                                                        <h:inputText
-                                                            id="txtMoveTo2"
-                                                            forceId="true"
-                                                            value="#{NavigationForm.workflowPlugin.processPaginator.txtMoveTo}"
-                                                            style="display:none;width:30px"
-                                                            required="true"
-                                                            onblur="document.getElementById('txtMoveTo2').style.display='none';document.getElementById('txtMoveTo1').style.display='inline';"
-                                                            onkeypress="return submitEnter('cmdMoveTo',event)" />
-                                                        <h:commandButton
-                                                            action="#{NavigationForm.Reload}"
-                                                            id="cmdMoveTo"
-                                                            forceId="true"
-                                                            value="go"
-                                                            style="display:none">
-                                                        </h:commandButton>
-                                                    </div>
-
-                                                    <button
-                                                        class="btn btn-primary font-size-s navigator-next"
-                                                        jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveNext}"
-                                                        jsf:id="navnext">
-                                                        <h:outputText value="#{msgs.pageNext} " />
-                                                        <i class="fa fa-angle-right"></i>
-                                                        <f:ajax render="@form" />
-                                                    </button>
-                                                    <button
-                                                        class="btn font-size-s margin-sides-10"
-                                                        aria-label="#{msgs.lastPage}"
-                                                        jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveLast}"
-                                                        jsf:id="navlast">
-                                                        <i class="fa fa-angle-double-right"></i>
-                                                        <f:ajax render="@form" />
-                                                    </button>
+                                        <h:panelGroup rendered="#{process.process.panelAusgeklappt}">
+                                            <div class="box">
+                                                <div class="box-title">
+                                                    <h3>
+                                                        <span class="fa fa-list"></span>
+                                                        #{msgs.details}
+                                                    </h3>
                                                 </div>
-                                            </h:panelGroup>
+                                                <div class="box-content nopadding">
 
-                                            <!-- /paginator -->
+                                                    <h:dataTable
+                                                        styleClass="table table-hover table-bordered"
+                                                        id="prozessdetails"
+                                                        var="step"
+                                                        value="#{process.process.schritteList}">
 
-                                        </ui:fragment>
-                                    </div>
+                                                        <h:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="#{msgs.nr}" />
+                                                            </f:facet>
+                                                            <h:outputText
+                                                                value="#{step.reihenfolge}"
+                                                                styleClass="#{step.bearbeitungsstatusEnum == 'DEACTIVATED'?'font-light':''}" />
+                                                        </h:column>
 
-                                    <button
-                                        class="btn margin-sides-10 font-size-s btn-success pull-right"
-                                        aria-label="#{msgs.plugin_workflow_processinspection_executeChance}"
-                                        jsf:action="#{NavigationForm.workflowPlugin.executeChanges}">
-                                        <h:outputText value="#{msgs.plugin_workflow_processinspection_executeChance}" />
-                                        <f:ajax render="@form" />
-                                    </button>
+                                                        <h:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText
+                                                                    value="#{msgs.titel}"
+                                                                    style="white-space: normal;" />
+                                                            </f:facet>
+                                                            <h:panelGroup rendered="#{step.typAutomatisch}">
+                                                                <i
+                                                                    class="fa fa-cogs font-light margin-right-10"
+                                                                    title="#{msgs.automatischerSchritt}" />
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{not step.typAutomatisch}">
+                                                                <i
+                                                                    class="fa fa-user-o font-light margin-right-10"
+                                                                    title="#{msgs.normalerSchritt}" />
+                                                            </h:panelGroup>
+                                                            <h:outputText
+                                                                value="#{step.titelLokalisiert}"
+                                                                title="#{step.titel}"
+                                                                style="white-space: normal;"
+                                                                styleClass="#{step.reihenfolge}_id #{step.bearbeitungsstatusEnum == 'DEACTIVATED'?'font-light':''}" />
+                                                        </h:column>
 
-                                </div>
+                                                        <h:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="#{msgs.status}" />
+                                                            </f:facet>
 
+                                                            <ul class="colors small13">
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'LOCKED'}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        title="#{msgs.statusGesperrt}"
+                                                                        rel="tooltip" />
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'OPEN'}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        title="#{msgs.statusOffen}"
+                                                                        rel="tooltip" />
+                                                                </h:panelGroup>
+
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DONE' and HelperForm.anonymized}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        rel="tooltip"
+                                                                        title="#{step.bearbeitungsstatusEnum.title} #{step.editTypeEnum.title}" />
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and HelperForm.anonymized}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        rel="tooltip"
+                                                                        title="#{step.bearbeitungsstatusEnum.title}: #{step.editTypeEnum.title}" />
+                                                                </h:panelGroup>
+
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DONE' and !HelperForm.anonymized}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        rel="tooltip"
+                                                                        title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and !HelperForm.anonymized}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        rel="tooltip"
+                                                                        title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and !HelperForm.anonymized}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        rel="tooltip"
+                                                                        title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and HelperForm.anonymized}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        rel="tooltip"
+                                                                        title="#{step.bearbeitungsstatusEnum.title}: #{step.editTypeEnum.title}" />
+                                                                </h:panelGroup>
+
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DEACTIVATED'}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        title="#{step.bearbeitungsstatusEnum.title}"
+                                                                        rel="tooltip" />
+                                                                </h:panelGroup>
+
+                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INFLIGHT'}">
+                                                                    <li
+                                                                        class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
+                                                                        title="#{msgs.statusInFlight}"
+                                                                        data-toggle="tooltip"></li>
+                                                                </h:panelGroup>
+                                                            </ul>
+                                                            <h:outputText
+                                                                value="#{step.bearbeitungsstatusEnum.title}"
+                                                                rendered="#{LoginForm.myBenutzer.uiMode=='low_vision'}" />
+                                                        </h:column>
+
+                                                    </h:dataTable>
+
+                                                </div>
+                                            </div>
+
+                                        </h:panelGroup>
+
+                                    </td>
+
+                                    <!-- PROCESS DATE -->
+                                    <td>
+                                        <h:outputText value="#{process.process.erstellungsdatumAsString}">
+                                        </h:outputText>
+                                    </td>
+
+                                    <!-- EMBEDDED METADATA -->
+                                    <td>
+                                        <table class="table table-borderless">
+                                            <ui:repeat
+                                                var="metadata"
+                                                value="#{NavigationForm.workflowPlugin.metadataList}"
+                                                varStatus="metadatastatus"
+                                                id="metadatalist">
+                                                <ui:fragment rendered="#{process.getMetadataValue(metadata) != ''}">
+                                                    <tr>
+                                                        <td class="tableColumnWidth100 smallertablecell fw-bold">
+                                                            <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
+                                                        </td>
+                                                        <td class="tableColumnWidth100 smallertablecell">
+                                                            <h:outputText value="#{process.getAllMetadataValues(metadata)}" />
+                                                        </td>
+                                                    </tr>
+                                                </ui:fragment>
+                                            </ui:repeat>
+
+
+
+                                            <ui:repeat
+                                                var="propName"
+                                                value="#{NavigationForm.workflowPlugin.propertyList}"
+                                                varStatus="propertystatus"
+                                                id="propertyList">
+
+                                                <ui:repeat
+                                                    var="property"
+                                                    value="#{process.process.eigenschaften}">
+                                                    <ui:fragment rendered="#{property.titel eq propName and property.wert != ''}">
+                                                        <tr class="#{propertystatus.index == 0 ? 'border-top':''}">
+                                                            <td class="tableColumnWidth100 smallertablecell fw-bold">
+                                                                <h:outputText value="#{msgs['process_grid_'.concat(propName)]}:" />
+                                                            </td>
+                                                            <td class="tableColumnWidth100 smallertablecell">
+                                                                <h:outputText value="#{property.wert}" />
+                                                            </td>
+                                                        </tr>
+                                                    </ui:fragment>
+                                                </ui:repeat>
+
+
+
+                                            </ui:repeat>
+
+                                        </table>
+                                    </td>
+
+                                    <!-- FULLTEXT -->
+                                    <td>
+
+                                        <div
+                                            class="fulltext-output"
+                                            jsf:rendered="#{not empty process.fulltext}">
+                                            <!--
+                                                                        <h:outputText
+                                                                                style="word-break: break-word; hyphens: auto;"
+                                                                                value="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+                                                                                escape="false" />
+                                                                    -->
+
+
+                                            <h:outputText
+                                                style="word-break: break-word; hyphens: auto;"
+                                                value="#{process.fulltext}"
+                                                escape="false" />
+                                        </div>
+                                    </td>
+
+                                    <!-- BUTTONS -->
+                                    <td class="width200">
+                                        <h:selectOneRadio
+                                            value="#{process.selectedAction}"
+                                            styleClass="select actions-table"
+                                            id="select">
+                                            <f:selectItems
+                                                var="item"
+                                                value="#{NavigationForm.workflowPlugin.options}"
+                                                itemLabel="#{item.label}"
+                                                itemValue="#{item.label}" />
+                                            <f:ajax
+                                                execute="@this"
+                                                render="@this" />
+                                        </h:selectOneRadio>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                        </table:table>
+                    </table:wrapper>
+                    <div class="dataTables_wrapper flow">
+                        <div class="dataTables__filters">
+                            <div class="dataTables_length">
                             </div>
 
+
+                            <div class="dataTables_filter">
+                                <div class="input-group input-group">
+
+                                </div>
+                            </div>
+
+                            <div class="dataTables_filter">
+
+
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </section:body>
+                <section:footer>
+                    <div class="dataTables__paginator">
+                        <ui:fragment id="zdb_paginator">
+                            <!-- paginator -->
+                            <h:panelGroup
+                                layout="block"
+                                rendered="#{NavigationForm.workflowPlugin.processPaginator.totalResults > LoginForm.myBenutzer.tabellengroesse}"
+                                >
+                                <button
+                                    class="btn btn-blank"
+                                    aria-label="#{msgs.firstPage}"
+                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveFirst}"
+                                    jsf:id="navfirst">
+                                    <span class="fa fa-angle-double-left"></span>
+                                    <f:ajax render="@form" />
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMovePrevious}"
+                                    jsf:id="navprev">
+                                    <span class="fa fa-angle-left"></span>
+                                    <h:outputText value=" #{msgs.pagePrevious}" />
+                                    <f:ajax render="@form" />
+                                </button>
+
+                                <div class="dataTables__paginator__page-count">
+                                    <!-- aktuelle Seite anzeigen -->
+                                    <button
+                                        type="button"
+                                        jsf:id="txtMoveTo1"
+                                        class="btn btn-link text-black"
+                                        onclick="document.querySelector('[id$=txtMoveTo2]').style.display='inline';
+                                            document.querySelector('[id$=txtMoveTo1]').style.display='none';
+                                            document.querySelector('[id$=txtMoveTo2]').focus();
+                                            document.querySelector('[id$=txtMoveTo2]').select();">
+                                        #{msgs.seite} #{NavigationForm.workflowPlugin.processPaginator.pageNumberCurrent} #{msgs.von} #{NavigationForm.workflowPlugin.processPaginator.pageNumberLast}
+                                    </button>
+
+                                    <!-- Seite direkt anspringen -->
+                                    <h:inputText
+                                        id="txtMoveTo2"
+                                        forceId="true"
+                                        value="#{NavigationForm.workflowPlugin.processPaginator.txtMoveTo}"
+                                        style="display:none;width:30px"
+                                        required="true"
+                                        onblur="document.querySelector('[id$=txtMoveTo2]').style.display='none';document.querySelector('[id$=txtMoveTo1]').style.display='inline';"
+                                        onkeypress="return submitEnter('cmdMoveTo',event)" />
+                                    <h:commandButton
+                                        action="#{NavigationForm.Reload}"
+                                        id="cmdMoveTo"
+                                        forceId="true"
+                                        value="go"
+                                        style="display:none">
+                                    </h:commandButton>
+                                </div>
+
+                                <button
+                                    class="btn btn-primary"
+                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveNext}"
+                                    jsf:id="navnext">
+                                    <h:outputText value="#{msgs.pageNext} " />
+                                    <span class="fa fa-angle-right"></span>
+                                    <f:ajax render="@form" />
+                                </button>
+                                <button
+                                    class="btn btn-blank"
+                                    aria-label="#{msgs.lastPage}"
+                                    jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveLast}"
+                                    jsf:id="navlast">
+                                    <span class="fa fa-angle-double-right"></span>
+                                    <f:ajax render="@form" />
+                                </button>
+                            </h:panelGroup>
+
+                            <!-- /paginator -->
+
+                        </ui:fragment>
+                    </div>
+                </section:footer>
+                <section:footer>
+
+                    <button
+                        class="btn btn-success "
+                        aria-label="#{msgs.plugin_workflow_processinspection_executeChance}"
+                        jsf:action="#{NavigationForm.workflowPlugin.executeChanges}">
+                        <h:outputText value="#{msgs.plugin_workflow_processinspection_executeChance}" />
+                        <f:ajax render="@form" />
+                    </button>
+                </section:footer>
+            </section:section>
         </h:form>
 
         <script type="text/javascript">
