@@ -11,6 +11,7 @@
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
     xmlns:section="http://goobi.io/section"
     xmlns:table="http://goobi.io/table"
+    xmlns:dl="http://goobi.io/dl"
     >
 
     <composite:interface>
@@ -159,7 +160,7 @@ td .actions-table {
                                         class="tableColumnOverflow maxWidth300"
                                         aria-sort="#{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'ascending' :'none'}">
                                         <button
-                                            class="button-link"
+                                            class="column-header-sort"
                                             style="width: 100%; text-align: left;"
                                             jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
                                             aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
@@ -179,7 +180,7 @@ td .actions-table {
                                         class="tableColumnOverflow maxWidth200"
                                         aria-sort="#{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? 'descending' : NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'ascending' :'none'}">
                                         <button
-                                            class="button-link"
+                                            class="column-header-sort"
                                             style="width: 100%; text-align: left;"
                                             jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
                                             aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'creationDateAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
@@ -235,14 +236,16 @@ td .actions-table {
                                     <td>
                                         <button
                                             type="button"
-                                            class="button-link font-black"
+                                            class="btn btn--plusMinus text-start"
                                             jsf:rendered="#{!process.process.panelAusgeklappt}"
                                             title="#{process.process.titel}"
                                             jsf:id="displayDetails"
                                             aria-haspopup="true"
                                             aria-expanded="false">
-                                            <span class="fa fa-angle-right margin-right-5"></span>
-                                            <h:outputText value="#{process.process.titelLokalisiert}" />
+                                            <span class="fa fa-angle-right"></span>
+                                            <span>
+                                                #{process.process.titelLokalisiert}
+                                            </span>
                                             <f:setPropertyActionListener
                                                 target="#{process.process.panelAusgeklappt}"
                                                 value="true" />
@@ -251,14 +254,16 @@ td .actions-table {
 
                                         <button
                                             type="button"
-                                            class="button-link font-black"
+                                            class="btn btn--plusMinus text-start"
                                             jsf:rendered="#{process.process.panelAusgeklappt}"
                                             title="#{process.process.titel}"
                                             jsf:id="hideDetails"
                                             aria-haspopup="true"
                                             aria-expanded="true">
-                                            <span class="fa fa-angle-down margin-right-5"></span>
-                                            <h:outputText value="#{process.process.titelLokalisiert}" />
+                                            <span class="fa fa-angle-down"></span>
+                                            <span>
+                                                #{process.process.titelLokalisiert}
+                                            </span>
                                             <f:setPropertyActionListener
                                                 target="#{process.process.panelAusgeklappt}"
                                                 value="false" />
@@ -266,15 +271,11 @@ td .actions-table {
                                         </button>
 
                                         <h:panelGroup rendered="#{process.process.panelAusgeklappt}">
-                                            <div class="box">
-                                                <div class="box-title">
-                                                    <h3>
-                                                        <span class="fa fa-list"></span>
-                                                        #{msgs.details}
-                                                    </h3>
-                                                </div>
-                                                <div class="box-content nopadding">
-
+                                            <section:section type="outline">
+                                                <section:header
+                                                    icon="list"
+                                                    title="#{msgs.details}" />
+                                                <section:body>
                                                     <h:dataTable
                                                         styleClass="table table-hover table-bordered"
                                                         id="prozessdetails"
@@ -390,9 +391,8 @@ td .actions-table {
                                                         </h:column>
 
                                                     </h:dataTable>
-
-                                                </div>
-                                            </div>
+                                                </section:body>
+                                            </section:section>
 
                                         </h:panelGroup>
 
@@ -406,52 +406,45 @@ td .actions-table {
 
                                     <!-- EMBEDDED METADATA -->
                                     <td>
-                                        <table class="table table-borderless">
+                                        <dl:list bordered="false">
+
                                             <ui:repeat
                                                 var="metadata"
                                                 value="#{NavigationForm.workflowPlugin.metadataList}"
                                                 varStatus="metadatastatus"
                                                 id="metadatalist">
                                                 <ui:fragment rendered="#{process.getMetadataValue(metadata) != ''}">
-                                                    <tr>
-                                                        <td class="tableColumnWidth100 smallertablecell fw-bold">
-                                                            <h:outputText value="#{msgs['process_grid_'.concat(metadata)]}:" />
-                                                        </td>
-                                                        <td class="tableColumnWidth100 smallertablecell">
-                                                            <h:outputText value="#{process.getAllMetadataValues(metadata)}" />
-                                                        </td>
-                                                    </tr>
+                                                    <dl:term>
+                                                        #{msgs['process_grid_'.concat(metadata)]}:
+                                                    </dl:term>
+                                                    <dl:description>
+                                                        #{process.getAllMetadataValues(metadata)}
+                                                    </dl:description>
                                                 </ui:fragment>
                                             </ui:repeat>
-
-
-
                                             <ui:repeat
                                                 var="propName"
                                                 value="#{NavigationForm.workflowPlugin.propertyList}"
                                                 varStatus="propertystatus"
                                                 id="propertyList">
-
                                                 <ui:repeat
                                                     var="property"
                                                     value="#{process.process.eigenschaften}">
+                                                    <ui:fragment rendered="#{propertystatus.first}">
+                                                        <hr class="w-100"/>
+                                                        <hr class="w-100"/>
+                                                    </ui:fragment>
                                                     <ui:fragment rendered="#{property.titel eq propName and property.wert != ''}">
-                                                        <tr class="#{propertystatus.index == 0 ? 'border-top':''}">
-                                                            <td class="tableColumnWidth100 smallertablecell fw-bold">
-                                                                <h:outputText value="#{msgs['process_grid_'.concat(propName)]}:" />
-                                                            </td>
-                                                            <td class="tableColumnWidth100 smallertablecell">
-                                                                <h:outputText value="#{property.wert}" />
-                                                            </td>
-                                                        </tr>
+                                                        <dl:term>
+                                                            #{msgs['process_grid_'.concat(propName)]}:
+                                                        </dl:term>
+                                                        <dl:description>
+                                                            #{property.wert}
+                                                        </dl:description>
                                                     </ui:fragment>
                                                 </ui:repeat>
-
-
-
                                             </ui:repeat>
-
-                                        </table>
+                                        </dl:list>
                                     </td>
 
                                     <!-- FULLTEXT -->
