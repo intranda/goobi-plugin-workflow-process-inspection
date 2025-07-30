@@ -453,14 +453,6 @@ td .actions-table {
                                         <div
                                             class="fulltext-output"
                                             jsf:rendered="#{not empty process.fulltext}">
-                                            <!--
-                                                                        <h:outputText
-                                                                                style="word-break: break-word; hyphens: auto;"
-                                                                                value="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                                                                                escape="false" />
-                                                                    -->
-
-
                                             <h:outputText
                                                 style="word-break: break-word; hyphens: auto;"
                                                 value="#{process.fulltext}"
@@ -472,7 +464,7 @@ td .actions-table {
                                     <td class="width200">
                                         <h:selectOneRadio
                                             value="#{process.selectedAction}"
-                                            styleClass="select actions-table"
+                                            styleClass="select-radio select-radio-vertical"
                                             id="select">
                                             <f:selectItems
                                                 var="item"
@@ -488,24 +480,6 @@ td .actions-table {
                             </ui:repeat>
                         </table:table>
                     </table:wrapper>
-                    <div class="dataTables_wrapper flow">
-                        <div class="dataTables__filters">
-                            <div class="dataTables_length">
-                            </div>
-
-
-                            <div class="dataTables_filter">
-                                <div class="input-group input-group">
-
-                                </div>
-                            </div>
-
-                            <div class="dataTables_filter">
-
-
-                            </div>
-                        </div>
-                    </div>
                 </section:body>
                 <section:footer>
                     <div class="dataTables__paginator">
