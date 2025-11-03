@@ -173,6 +173,8 @@ public class ExtendendProcess implements DatabaseObject {
         String extension = representativeImage.substring(representativeImage.lastIndexOf(".") + 1);
 
         switch (extension.toLowerCase()) {
+            case "jpg", "jpeg", "tif", "png", "jp2":
+                break;
             case "pdf":
                 representativeImage = "uii/template/img/goobi_placeholder_pdf.png?version=1";
                 break;
