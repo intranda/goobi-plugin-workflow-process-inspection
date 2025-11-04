@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -142,6 +143,46 @@ public class ExtendendProcess implements DatabaseObject {
             }
         }
         return sb.toString();
+    }
+
+    public class PropertyDisplay {
+        private String name;
+        private String value;
+
+        public PropertyDisplay(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    /**
+     * Get filtered properties that match the given property names and have non-empty values
+     *
+     * @param propertyNames list of property names to filter for
+     * @return list of PropertyDisplay objects with property name and value, only for properties with non-empty values
+     */
+    public List<PropertyDisplay> getFilteredProperties(List<String> propertyNames) {
+        List<PropertyDisplay> result = new ArrayList<>();
+        if (propertyNames == null || propertyNames.isEmpty()) {
+            return result;
+        }
+
+        for (String propName : propertyNames) {
+            for (var property : process.getEigenschaften()) {
+                if (property.getPropertyName().equals(propName) && StringUtils.isNotBlank(property.getPropertyValue())) {
+                    result.add(new PropertyDisplay(propName, property.getPropertyValue()));
+                }
+            }
+        }
+        return result;
     }
 
     private String getRepresentativeImageAsString() {

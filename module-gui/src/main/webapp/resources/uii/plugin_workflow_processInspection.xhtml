@@ -429,27 +429,20 @@ td .actions-table {
                                                     </dl:description>
                                                 </ui:fragment>
                                             </ui:repeat>
+                                            <ui:fragment rendered="#{process.getFilteredProperties(NavigationForm.workflowPlugin.propertyList).size() > 0}">
+                                                <hr class="w-100" />
+                                            </ui:fragment>
                                             <ui:repeat
-                                                var="propName"
-                                                value="#{NavigationForm.workflowPlugin.propertyList}"
+                                                var="property"
+                                                value="#{process.getFilteredProperties(NavigationForm.workflowPlugin.propertyList)}"
                                                 varStatus="propertystatus"
                                                 id="propertyList">
-                                                <ui:repeat
-                                                    var="property"
-                                                    value="#{process.process.eigenschaften}">
-                                                    <ui:fragment rendered="#{propertystatus.first}">
-                                                        <hr class="w-100" />
-                                                        <hr class="w-100" />
-                                                    </ui:fragment>
-                                                    <ui:fragment rendered="#{property.titel eq propName and property.wert != ''}">
-                                                        <dl:term>
-                                                            #{msgs['process_grid_'.concat(propName)]}:
-                                                        </dl:term>
-                                                        <dl:description>
-                                                            #{property.wert}
-                                                        </dl:description>
-                                                    </ui:fragment>
-                                                </ui:repeat>
+                                                <dl:term>
+                                                    #{msgs['process_grid_'.concat(property.name)]}:
+                                                </dl:term>
+                                                <dl:description>
+                                                    #{property.value}
+                                                </dl:description>
                                             </ui:repeat>
                                         </dl:list>
                                     </td>
