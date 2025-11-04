@@ -11,8 +11,7 @@
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
     xmlns:section="http://goobi.io/section"
     xmlns:table="http://goobi.io/table"
-    xmlns:dl="http://goobi.io/dl"
-    >
+    xmlns:dl="http://goobi.io/dl">
 
     <composite:interface>
     </composite:interface>
@@ -95,7 +94,9 @@ td .actions-table {
             id="searchform">
             <!-- search field -->
             <section:section type="primary">
-                <section:header icon="compass" title="#{myPageTitle}"></section:header>
+                <section:header
+                    icon="compass"
+                    title="#{myPageTitle}"></section:header>
                 <section:body>
                     <!-- search box -->
                     <table:wrapper>
@@ -117,7 +118,9 @@ td .actions-table {
                                 <table:filter-input>
                                     <div class="input-group">
                                         <span class="input-group-text">
-                                            <span aria-hidden="true" class="fa fa-search" />
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-search" />
                                         </span>
                                         <h:inputText
                                             id="searchvalue_input"
@@ -165,7 +168,8 @@ td .actions-table {
                                             jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
                                             aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
                                             <h:outputText value="#{msgs.prozessTitel}" />
-                                            <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'fa-sort-asc':'fa-sort'}"></span>
+                                            <span
+                                                class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'fa-sort-asc':'fa-sort'}"></span>
                                             <f:setPropertyActionListener
                                                 target="#{NavigationForm.workflowPlugin.sortField}"
                                                 value="#{NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'titelDesc' : 'titelAsc' }" />
@@ -185,7 +189,8 @@ td .actions-table {
                                             jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
                                             aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'creationDateAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
                                             <h:outputText value="#{msgs.vorgangsdatum}" />
-                                            <span class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ?'fa-sort-asc':'fa-sort'}"></span>
+                                            <span
+                                                class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ?'fa-sort-asc':'fa-sort'}"></span>
                                             <f:setPropertyActionListener
                                                 target="#{NavigationForm.workflowPlugin.sortField}"
                                                 value="#{NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'creationDateDesc' : 'creationDateAsc' }" />
@@ -211,7 +216,7 @@ td .actions-table {
 
                                     <!-- ACTION -->
                                     <intranda:columnheader
-                                        addClass="width200"
+                                        style="width:200px"
                                         value="#{msgs.auswahl}"
                                         sortable="false" />
                                 </tr>
@@ -243,9 +248,7 @@ td .actions-table {
                                             aria-haspopup="true"
                                             aria-expanded="false">
                                             <span class="fa fa-angle-right"></span>
-                                            <span>
-                                                #{process.process.titelLokalisiert}
-                                            </span>
+                                            <span> #{process.process.titelLokalisiert} </span>
                                             <f:setPropertyActionListener
                                                 target="#{process.process.panelAusgeklappt}"
                                                 value="true" />
@@ -261,9 +264,7 @@ td .actions-table {
                                             aria-haspopup="true"
                                             aria-expanded="true">
                                             <span class="fa fa-angle-down"></span>
-                                            <span>
-                                                #{process.process.titelLokalisiert}
-                                            </span>
+                                            <span> #{process.process.titelLokalisiert} </span>
                                             <f:setPropertyActionListener
                                                 target="#{process.process.panelAusgeklappt}"
                                                 value="false" />
@@ -333,38 +334,44 @@ td .actions-table {
                                                                         rel="tooltip" />
                                                                 </h:panelGroup>
 
-                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DONE' and HelperForm.anonymized}">
+                                                                <h:panelGroup
+                                                                    rendered="#{step.bearbeitungsstatusEnum == 'DONE' and HelperForm.anonymized}">
                                                                     <li
                                                                         class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
                                                                         rel="tooltip"
                                                                         title="#{step.bearbeitungsstatusEnum.title} #{step.editTypeEnum.title}" />
                                                                 </h:panelGroup>
-                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and HelperForm.anonymized}">
+                                                                <h:panelGroup
+                                                                    rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and HelperForm.anonymized}">
                                                                     <li
                                                                         class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
                                                                         rel="tooltip"
                                                                         title="#{step.bearbeitungsstatusEnum.title}: #{step.editTypeEnum.title}" />
                                                                 </h:panelGroup>
 
-                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'DONE' and !HelperForm.anonymized}">
+                                                                <h:panelGroup
+                                                                    rendered="#{step.bearbeitungsstatusEnum == 'DONE' and !HelperForm.anonymized}">
                                                                     <li
                                                                         class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
                                                                         rel="tooltip"
                                                                         title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
                                                                 </h:panelGroup>
-                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and !HelperForm.anonymized}">
+                                                                <h:panelGroup
+                                                                    rendered="#{step.bearbeitungsstatusEnum == 'INWORK' and !HelperForm.anonymized}">
                                                                     <li
                                                                         class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
                                                                         rel="tooltip"
                                                                         title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
                                                                 </h:panelGroup>
-                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and !HelperForm.anonymized}">
+                                                                <h:panelGroup
+                                                                    rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and !HelperForm.anonymized}">
                                                                     <li
                                                                         class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
                                                                         rel="tooltip"
                                                                         title="#{step.bearbeitungsstatusEnum.title}: #{step.bearbeitungsbenutzer!=null and step.bearbeitungsbenutzer.id!=0?step.bearbeitungsbenutzer.nachVorname:''} (#{step.bearbeitungszeitpunkt !=null?step.bearbeitungszeitpunktAsFormattedString:''})  - #{step.editTypeEnum.title}" />
                                                                 </h:panelGroup>
-                                                                <h:panelGroup rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and HelperForm.anonymized}">
+                                                                <h:panelGroup
+                                                                    rendered="#{step.bearbeitungsstatusEnum == 'ERROR' and HelperForm.anonymized}">
                                                                     <li
                                                                         class="statusSmall #{(LoginForm.myBenutzer.uiMode=='low_vision'?('easy-read-'):('')).concat(step.bearbeitungsstatusEnum.color)}"
                                                                         rel="tooltip"
@@ -431,8 +438,8 @@ td .actions-table {
                                                     var="property"
                                                     value="#{process.process.eigenschaften}">
                                                     <ui:fragment rendered="#{propertystatus.first}">
-                                                        <hr class="w-100"/>
-                                                        <hr class="w-100"/>
+                                                        <hr class="w-100" />
+                                                        <hr class="w-100" />
                                                     </ui:fragment>
                                                     <ui:fragment rendered="#{property.titel eq propName and property.wert != ''}">
                                                         <dl:term>
@@ -487,8 +494,7 @@ td .actions-table {
                             <!-- paginator -->
                             <h:panelGroup
                                 layout="block"
-                                rendered="#{NavigationForm.workflowPlugin.processPaginator.totalResults > LoginForm.myBenutzer.tabellengroesse}"
-                                >
+                                rendered="#{NavigationForm.workflowPlugin.processPaginator.totalResults > LoginForm.myBenutzer.tabellengroesse}">
                                 <button
                                     class="btn btn-blank"
                                     aria-label="#{msgs.firstPage}"
@@ -516,8 +522,8 @@ td .actions-table {
                                             document.querySelector('[id$=txtMoveTo1]').style.display='none';
                                             document.querySelector('[id$=txtMoveTo2]').focus();
                                             document.querySelector('[id$=txtMoveTo2]').select();">
-                                        #{msgs.seite} #{NavigationForm.workflowPlugin.processPaginator.pageNumberCurrent} #{msgs.von} #{NavigationForm.workflowPlugin.processPaginator.pageNumberLast}
-                                    </button>
+                                        #{msgs.seite} #{NavigationForm.workflowPlugin.processPaginator.pageNumberCurrent} #{msgs.von}
+                                        #{NavigationForm.workflowPlugin.processPaginator.pageNumberLast}</button>
 
                                     <!-- Seite direkt anspringen -->
                                     <h:inputText
@@ -574,10 +580,10 @@ td .actions-table {
         </h:form>
 
         <script type="text/javascript">
-                                    window.onload = function() {
-                                        loadImages();
-                                    }
-                                </script>
+									window.onload = function() {
+										loadImages();
+									}
+								</script>
 
 
     </composite:implementation>
