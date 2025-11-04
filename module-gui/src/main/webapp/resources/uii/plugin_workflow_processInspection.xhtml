@@ -580,10 +580,19 @@ td .actions-table {
         </h:form>
 
         <script type="text/javascript">
-									window.onload = function() {
-										loadImages();
-									}
-								</script>
+            window.onload = function() {
+                loadImages();
+            }
+
+            faces.ajax.addOnEvent( function( data ) {
+                var ajaxstatus = data.status;
+                switch ( ajaxstatus ) {
+                    case "success":
+                        loadImages();
+                        break;
+                }
+            });
+        </script>
 
 
     </composite:implementation>
