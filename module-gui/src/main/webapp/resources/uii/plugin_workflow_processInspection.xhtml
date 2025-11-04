@@ -149,6 +149,7 @@ td .actions-table {
 
                                     <!-- THUMBNAIL -->
                                     <th
+                                        jsf:rendered="#{NavigationForm.workflowPlugin.showThumbnail}"
                                         scope="col"
                                         role="columnheader"
                                         class="tableColumnOverflow"
@@ -206,6 +207,7 @@ td .actions-table {
 
                                     <!-- FULLTEXT -->
                                     <th
+                                        jsf:rendered="#{NavigationForm.workflowPlugin.showFulltext}"
                                         scope="col"
                                         role="columnheader"
                                         class="tableColumnOverflow process-table__header--fulltext"
@@ -228,7 +230,7 @@ td .actions-table {
                                 <tr role="row">
 
                                     <!-- THUMBNAIL -->
-                                    <td>
+                                    <td jsf:rendered="#{NavigationForm.workflowPlugin.showThumbnail}">
                                         <canvas
                                             class="thumb-canvas"
                                             data-image_small="#{process.getThumbnailUrl(250)}"
@@ -431,6 +433,7 @@ td .actions-table {
                                             </ui:repeat>
                                             <ui:fragment rendered="#{process.getFilteredProperties(NavigationForm.workflowPlugin.propertyList).size() > 0}">
                                                 <hr class="w-100" />
+                                                <hr class="w-100" />
                                             </ui:fragment>
                                             <ui:repeat
                                                 var="property"
@@ -448,7 +451,7 @@ td .actions-table {
                                     </td>
 
                                     <!-- FULLTEXT -->
-                                    <td>
+                                    <td jsf:rendered="#{NavigationForm.workflowPlugin.showFulltext}">
 
                                         <div
                                             class="fulltext-output"
