@@ -149,6 +149,7 @@ td .actions-table {
 
                                     <!-- THUMBNAIL -->
                                     <th
+                                        jsf:rendered="#{NavigationForm.workflowPlugin.showThumbnail}"
                                         scope="col"
                                         role="columnheader"
                                         class="tableColumnOverflow"
@@ -206,6 +207,7 @@ td .actions-table {
 
                                     <!-- FULLTEXT -->
                                     <th
+                                        jsf:rendered="#{NavigationForm.workflowPlugin.showFulltext}"
                                         scope="col"
                                         role="columnheader"
                                         class="tableColumnOverflow process-table__header--fulltext"
@@ -228,7 +230,7 @@ td .actions-table {
                                 <tr role="row">
 
                                     <!-- THUMBNAIL -->
-                                    <td>
+                                    <td jsf:rendered="#{NavigationForm.workflowPlugin.showThumbnail}">
                                         <canvas
                                             class="thumb-canvas"
                                             data-image_small="#{process.getThumbnailUrl(250)}"
@@ -429,33 +431,27 @@ td .actions-table {
                                                     </dl:description>
                                                 </ui:fragment>
                                             </ui:repeat>
+                                            <ui:fragment rendered="#{process.getFilteredProperties(NavigationForm.workflowPlugin.propertyList).size() > 0}">
+                                                <hr class="w-100" />
+                                                <hr class="w-100" />
+                                            </ui:fragment>
                                             <ui:repeat
-                                                var="propName"
-                                                value="#{NavigationForm.workflowPlugin.propertyList}"
+                                                var="property"
+                                                value="#{process.getFilteredProperties(NavigationForm.workflowPlugin.propertyList)}"
                                                 varStatus="propertystatus"
                                                 id="propertyList">
-                                                <ui:repeat
-                                                    var="property"
-                                                    value="#{process.process.eigenschaften}">
-                                                    <ui:fragment rendered="#{propertystatus.first}">
-                                                        <hr class="w-100" />
-                                                        <hr class="w-100" />
-                                                    </ui:fragment>
-                                                    <ui:fragment rendered="#{property.titel eq propName and property.wert != ''}">
-                                                        <dl:term>
-                                                            #{msgs['process_grid_'.concat(propName)]}:
-                                                        </dl:term>
-                                                        <dl:description>
-                                                            #{property.wert}
-                                                        </dl:description>
-                                                    </ui:fragment>
-                                                </ui:repeat>
+                                                <dl:term>
+                                                    #{msgs['process_grid_'.concat(property.name)]}:
+                                                </dl:term>
+                                                <dl:description>
+                                                    #{property.value}
+                                                </dl:description>
                                             </ui:repeat>
                                         </dl:list>
                                     </td>
 
                                     <!-- FULLTEXT -->
-                                    <td>
+                                    <td jsf:rendered="#{NavigationForm.workflowPlugin.showFulltext}">
 
                                         <div
                                             class="fulltext-output"
@@ -580,10 +576,19 @@ td .actions-table {
         </h:form>
 
         <script type="text/javascript">
-									window.onload = function() {
-										loadImages();
-									}
-								</script>
+            window.onload = function() {
+                loadImages();
+            }
+
+            faces.ajax.addOnEvent( function( data ) {
+                var ajaxstatus = data.status;
+                switch ( ajaxstatus ) {
+                    case "success":
+                        loadImages();
+                        break;
+                }
+            });
+        </script>
 
 
     </composite:implementation>

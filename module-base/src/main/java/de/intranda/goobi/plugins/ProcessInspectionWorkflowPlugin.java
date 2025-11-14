@@ -57,7 +57,9 @@ public class ProcessInspectionWorkflowPlugin implements IWorkflowPlugin, IPlugin
     private String sortField = "creationDateDesc";
 
     private String defaultValue;
+    @Getter
     private boolean showFulltext = true;
+    @Getter
     private boolean showThumbnail = true;
 
     @Getter
