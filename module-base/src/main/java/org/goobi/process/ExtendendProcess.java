@@ -104,7 +104,7 @@ public class ExtendendProcess implements DatabaseObject {
                         try (BufferedReader in = new BufferedReader(
                                 new InputStreamReader(StorageProvider.getInstance().newInputStream(firstTxtFile), StandardCharsets.UTF_8))) {
                             while ((buffer = in.readLine()) != null && response.length() < 500) {
-                                response.append(buffer.replaceAll("(\\s+)", " ")).append("<br/>");
+                                response.append(buffer.replaceAll("[\\u0000-\\u001F\\u007F-\\u009F]", "").replaceAll("(\\s+)", " ")).append("<br/>");
                             }
                         }
                         fulltext = response.toString();
