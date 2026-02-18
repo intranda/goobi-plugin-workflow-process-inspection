@@ -11,7 +11,8 @@
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
     xmlns:section="http://goobi.io/section"
     xmlns:table="http://goobi.io/table"
-    xmlns:dl="http://goobi.io/dl">
+    xmlns:dl="http://goobi.io/dl"
+    xmlns:util="http://goobi.io/util">
 
     <composite:interface>
     </composite:interface>
@@ -118,9 +119,7 @@ td .actions-table {
                                 <table:filter-input>
                                     <div class="input-group">
                                         <span class="input-group-text">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-search" />
+                                            <util:icon icon="search" />
                                         </span>
                                         <h:inputText
                                             id="searchvalue_input"
@@ -169,8 +168,7 @@ td .actions-table {
                                             jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
                                             aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ? msgs.defaultSortFieldDesc : NavigationForm.workflowPlugin.sortField== 'titelAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
                                             <h:outputText value="#{msgs.prozessTitel}" />
-                                            <span
-                                                class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'fa-sort-asc':'fa-sort'}"></span>
+                                            <util:icon icon="#{NavigationForm.workflowPlugin.sortField== 'titelDesc' ?'sort-descending':NavigationForm.workflowPlugin.sortField== 'titelAsc' ?'sort-ascending':'arrows-sort'}" styleClass="pull-right table-sort-icon" />
                                             <f:setPropertyActionListener
                                                 target="#{NavigationForm.workflowPlugin.sortField}"
                                                 value="#{NavigationForm.workflowPlugin.sortField== 'titelAsc' ? 'titelDesc' : 'titelAsc' }" />
@@ -190,8 +188,7 @@ td .actions-table {
                                             jsf:action="#{NavigationForm.workflowPlugin.loadProcesses}"
                                             aria-label="#{msgs.defaultSortField} #{msgs.prozessTitel} #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ? msgs.defaultSortFieldDesc : BenutzerverwaltungForm.sortierung== 'creationDateAsc' ? msgs.defaultSortFieldAsc : msgs.defaultSortFieldNotSorted }">
                                             <h:outputText value="#{msgs.vorgangsdatum}" />
-                                            <span
-                                                class="pull-right table-sort-icon fa #{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ?'fa-sort-desc':NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ?'fa-sort-asc':'fa-sort'}"></span>
+                                            <util:icon icon="#{NavigationForm.workflowPlugin.sortField== 'creationDateDesc' ?'sort-descending':NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ?'sort-ascending':'arrows-sort'}" styleClass="pull-right table-sort-icon" />
                                             <f:setPropertyActionListener
                                                 target="#{NavigationForm.workflowPlugin.sortField}"
                                                 value="#{NavigationForm.workflowPlugin.sortField== 'creationDateAsc' ? 'creationDateDesc' : 'creationDateAsc' }" />
@@ -249,7 +246,7 @@ td .actions-table {
                                             jsf:id="displayDetails"
                                             aria-haspopup="true"
                                             aria-expanded="false">
-                                            <span class="fa fa-angle-right"></span>
+                                            <util:icon icon="chevron-right" />
                                             <span> #{process.process.titelLokalisiert} </span>
                                             <f:setPropertyActionListener
                                                 target="#{process.process.panelAusgeklappt}"
@@ -265,7 +262,7 @@ td .actions-table {
                                             jsf:id="hideDetails"
                                             aria-haspopup="true"
                                             aria-expanded="true">
-                                            <span class="fa fa-angle-down"></span>
+                                            <util:icon icon="chevron-down" />
                                             <span> #{process.process.titelLokalisiert} </span>
                                             <f:setPropertyActionListener
                                                 target="#{process.process.panelAusgeklappt}"
@@ -301,14 +298,10 @@ td .actions-table {
                                                                     style="white-space: normal;" />
                                                             </f:facet>
                                                             <h:panelGroup rendered="#{step.typAutomatisch}">
-                                                                <i
-                                                                    class="fa fa-cogs font-light margin-right-10"
-                                                                    title="#{msgs.automatischerSchritt}" />
+                                                                <util:icon icon="settings-cog" styleClass="margin-right-10 icon--muted" title="#{msgs.automatischerSchritt}" />
                                                             </h:panelGroup>
                                                             <h:panelGroup rendered="#{not step.typAutomatisch}">
-                                                                <i
-                                                                    class="fa fa-user-o font-light margin-right-10"
-                                                                    title="#{msgs.normalerSchritt}" />
+                                                                <util:icon icon="user" styleClass="margin-right-10 icon--muted" title="#{msgs.normalerSchritt}" />
                                                             </h:panelGroup>
                                                             <h:outputText
                                                                 value="#{step.titelLokalisiert}"
@@ -496,14 +489,14 @@ td .actions-table {
                                     aria-label="#{msgs.firstPage}"
                                     jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveFirst}"
                                     jsf:id="navfirst">
-                                    <span class="fa fa-angle-double-left"></span>
+                                    <util:icon icon="chevrons-left" />
                                     <f:ajax render="@form" />
                                 </button>
                                 <button
                                     class="btn btn-primary"
                                     jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMovePrevious}"
                                     jsf:id="navprev">
-                                    <span class="fa fa-angle-left"></span>
+                                    <util:icon icon="chevron-left" />
                                     <h:outputText value=" #{msgs.pagePrevious}" />
                                     <f:ajax render="@form" />
                                 </button>
@@ -544,7 +537,7 @@ td .actions-table {
                                     jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveNext}"
                                     jsf:id="navnext">
                                     <h:outputText value="#{msgs.pageNext} " />
-                                    <span class="fa fa-angle-right"></span>
+                                    <util:icon icon="chevron-right" />
                                     <f:ajax render="@form" />
                                 </button>
                                 <button
@@ -552,7 +545,7 @@ td .actions-table {
                                     aria-label="#{msgs.lastPage}"
                                     jsf:action="#{NavigationForm.workflowPlugin.processPaginator.cmdMoveLast}"
                                     jsf:id="navlast">
-                                    <span class="fa fa-angle-double-right"></span>
+                                    <util:icon icon="chevrons-right" />
                                     <f:ajax render="@form" />
                                 </button>
                             </h:panelGroup>
